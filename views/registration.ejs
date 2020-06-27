@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link
+      rel="stylesheet"
+      href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
+    />
+    <link rel='stylesheet' type='text/css'  href="/style.css" />
+    <meta charset="utf-8" />
+    <title>Registration</title>
+    <h1>Register</h1>
+  </head>
+
+  <body>
+    <div class="registrationForm">
+      <form
+        class="text-center border border-light p-4"
+        action="/registration"
+        method="POST"
+      >
+        <label>Name</label>
+        <br />
+        <input type="text" name="name" class="form-control mb-3" />
+        <br />
+
+        <label>Surname</label>
+        <br />
+        <input
+          type="text"
+          name="surname"
+          id="data"
+          required
+          class="form-control mb-4"
+        />
+        <br />
+
+        <label>Username</label>
+        <br />
+        <input
+          type="text"
+          name="username"
+          id="data"
+          required
+          class="form-control mb-4"
+        />
+        <br />
+
+        <label>Email</label>
+        <br />
+        <input
+          type="email"
+          name="email"
+          id="data"
+          required
+          class="form-control mb-4"
+        />
+        <br />
+
+        <label>Password</label>
+        <br />
+        <input
+          type="password"
+          name="password"
+          id="data"
+          min="8"
+          required
+          class="form-control mb-4"
+        />
+        <br />
+
+        <label>Confirm Password</label>
+        <br />
+        <input
+          type="password"
+          name="conf_password"
+          id="data"
+          min="8"
+          required
+          class="form-control mb-4"
+        />
+        <br />
+        <div class="submitButton">
+          <br /><br />
+          <button type="submit" class="btn btn-danger btn-block my-4">
+            Register
+          </button>
+          </div>
+      </form>
+      <form action="/login">
+        <button type="submit" name="login_button">login</button>
+    </form>
+    </div>
+  </body>
+</html>
