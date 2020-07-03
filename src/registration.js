@@ -75,15 +75,33 @@ router.post("/", urlencodedParser, function (req, res) {
       res.render("registration");
       return;
     } else {
-      var record = {
+      var user_record = {
         name: name,
         surname: surname,
         username: username,
         email: email,
         password: hashed_pass,
+        verified: '0',
+        setup: '0',
       };
 
-      con.query("INSERT INTO user SET?", record, function (err, result) {
+      var profile_record = {
+        gender: null,
+        pref_gender: null,
+        bio: null,
+        age: null,
+        username: username,
+      };
+
+      con.query("INSERT INTO user_profile SET?", profile_record, function (err, result) {
+        if (err) {
+          status = "Unable to create this user";
+          console.log(status);
+          console.log(err);
+        }
+        })
+
+      con.query("INSERT INTO user SET?", user_record, function (err, result) {
         if (err) {
           status = "Unable to create this user";
           console.log(status);

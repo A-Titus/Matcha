@@ -8,6 +8,7 @@
     transform: translate(-50%, -50%);
     border-radius: 3%;
     background-color: white;
+    padding-top: 2%;
 }
 
 .registrationForm {
@@ -20,6 +21,7 @@
     transform: translate(-50%, -50%);
     border-radius: 3%;
     background-color: white;
+    padding-top: 2%;
 }
 
 
@@ -37,11 +39,11 @@ body, html{
 }
 
 .setProfile {
-    width: 100%;
+    width: 50%;
     height: 95%;
     text-align: center;
     position: relative;
-    top: 65%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 3%;
@@ -50,11 +52,11 @@ body, html{
 }
 
 .setProfile2 {
-    width: 200%;
-    height: 245%;
+    width: 50%;
+    height: 135%;
     text-align: center;
     position: relative;
-    top: 135%;
+    top: 60%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 3%;
@@ -76,6 +78,118 @@ body, html{
 }
 
 .setProfile4 {
+    width: 50%;
+    height: 40%;
+    text-align: center;
+    position: relative;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 3%;
+    border: 1px solid rgb(131, 130, 130);
+    background-color: white;
+}
+
+.setProfilePic {
+    width: 50%;
+    height: 85%;
+    text-align: center;
+    position: relative;
+    top: 37%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 3%;
+    border: 1px solid rgb(131, 130, 130);
+    background-color: white;
+}
+
+.profile {
+    width: 45%;
+    height: 80%;
+    text-align: center;
+    position: relative;
+    top: 45%;
+    left: 45%;
+    transform: translate(15%, -50%);
+    border-radius: 3%;
+    border: 1px solid rgb(131, 130, 130);
+    background-color: white;
+}
+
+.profilePic {
+    width: 35%;
+    height: 25%;
+    position: fixed;
+    top: 6%;
+    left: 35%;
+    transform: translate(0%, 5%);
+    border-radius: 3%;
+    border: 1px solid rgb(131, 130, 130);
+    margin-bottom: 2%;
+}
+
+.images {
+    width: 95%;
+    height: 50%;
+    position: fixed;
+    top: 10%;
+    left: -12%;
+    transform: translate(15%, 60%);
+}
+
+.profile1 {
+    width: 45%;
+    height: 80%;
+    text-align: center;
+    position: relative;
+    top: 45%;
+    left: 55%;
+    transform: translate(-115%, -150%);
+    border-radius: 3%;
+    border: 1px solid rgb(131, 130, 130);
+    background-color: white;
+}
+
+.updateProfile {
+    width: 100%;
+    height: 95%;
+    text-align: center;
+    position: relative;
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 3%;
+    background-color: white;
+    border: 1px solid gray;
+}
+
+.updateProfile2 {
+    width: 100%;
+    height: 135%;
+    text-align: center;
+    position: relative;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 3%;
+    border: 1px solid gray;
+    background-color: white;
+}
+
+.updateProfile3{
+    width: 45%;
+    height: 90%;
+    text-align: center;
+    position: relative;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 3%;
+    background-color: white;
+    border: 1px solid gray;
+}
+
+.updateProfile4 {
     width: 100%;
     height: 40%;
     text-align: center;
@@ -89,11 +203,18 @@ body, html{
 }
 
 
-    
+.profileButton {
+    position: fixed;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, 280%);
+    width: 100%;
+}   
 
 .submitButton{
     width: 100%;
     margin-right: 20%;
+
 }
 
 .interests{
@@ -119,11 +240,11 @@ body, html{
     height: 8%;
 }
 
-.image_display{
+.image_display {
     border-radius: 3%;
     border: 1px solid gray;
-    width: 35%;
-    height: 5%;
+    width: 25%;
+    height: 35%;
     margin-top: 3%;
 }
 

@@ -27,13 +27,13 @@ function database() {
     if (err) throw err;
     console.log("Connected");
     var sql =
-      "CREATE TABLE IF NOT EXISTS user(id int AUTO_INCREMENT PRIMARY KEY , name varchar(255),surname varchar(255),username varchar(255),email varchar(255),password varchar(255))";
+      "CREATE TABLE IF NOT EXISTS user(id int AUTO_INCREMENT PRIMARY KEY , name varchar(255),surname varchar(255),username varchar(255),email varchar(255),password varchar(255), verified boolean, setup boolean)";
     con.query(sql, function (err, result) {
       if (err) throw err;
       console.log("user Table created");
     });
 
-    var sql = "CREATE TABLE IF NOT EXISTS images (img_id int(11) AUTO_INCREMENT PRIMARY KEY, image_name varchar(255) , image_path varchar(255) , username varchar(255))";
+    var sql = "CREATE TABLE IF NOT EXISTS images (img_id int(11) AUTO_INCREMENT PRIMARY KEY, image_name varchar(255) , image_path varchar(255) , username varchar(255), profile_pic boolean)";
     con.query(sql, function (err, result) {
       if (err) throw err;
       console.log("image Table created");

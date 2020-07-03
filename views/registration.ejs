@@ -9,10 +9,20 @@
     <link rel='stylesheet' type='text/css'  href="/style.css" />
     <meta charset="utf-8" />
     <title>Registration</title>
-    <h1>Register</h1>
   </head>
 
   <body>
+
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Matcha</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        </ul>
+      </div>
+    </nav>
     <div class="registrationForm">
       <form
         class="text-center border border-light p-4"
@@ -87,9 +97,6 @@
           </button>
           </div>
       </form>
-      <form action="/login">
-        <button type="submit" name="login_button">login</button>
-    </form>
     </div>
   </body>
 </html>

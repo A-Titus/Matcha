@@ -42,7 +42,9 @@ const PATH = './public/uploads';
               return cb(new Error('Allowed only .png, .jpg, .jpeg and .gif'));
           }
       }
-  });router.post('/', upload.single('image'), (req, res, next) => {
+  });
+  
+  router.post('/', upload.single('image'), (req, res, next) => {
       if(!req.file.filename || !req.file.path)
       res.redirect("/setProfile");
     var image_name = req.file.filename;
@@ -68,10 +70,23 @@ const PATH = './public/uploads';
         
       }
     });
-    con.query(" SELECT `image_path` FROM `images` WHERE `username` = ?", req.session.user, function (err, result, fields) {
-      if (err) throw err;
-      console.log(result);
-      res.redirect("/setprofile");
+    // con.query(" SELECT `image_path` FROM `images` WHERE `username` = ?", req.session.user, function (err, result, fields) {
+    //   if (err) throw err;
+    //   console.log(result);
+
+    // });
+
+    con.query("SELECT * FROM user WHERE username = ?", [req.session.user], function (err, result) {
+      if (err) {
+        console.log(err);
+      } 
+      else {
+        var setup = result[0].setup;
+        if(setup == 1)
+          res.redirect("/updateProfile");                //check if profile is already set up and redirec accordingly  
+        else
+          res.redirect("/setprofile");
+      }
     });
 
    

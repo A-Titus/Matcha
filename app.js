@@ -12,6 +12,8 @@ var registration = require('./src/registration');
 var login = require('./src/login');
 var setProfile = require('./src/set_profile');
 var upload = require('./src/upload');
+var profile = require('./src/profile');
+var updateProfile = require('./src/update_profile');
 
 // app.get("*", function (req, res) {
 //   res.render("error");
@@ -28,13 +30,19 @@ app.use('/registration', registration);
 app.use('/login', login); 
 app.use('/setProfile', setProfile); 
 app.use('/uploads', upload); 
+app.use('/profile', profile); 
+app.use('/updateProfile', updateProfile); 
 
 app.get("/", function (req, res) {
+  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
   if(!req.session.user){
     res.render('registration', {msg: "Please register"});
   }
   else
-    res.render("home");
+     if(req.session.profile == 'done')
+      res.render("home");
+      else
+      res.render("set_profile", {photos: null, profile_pic: null})
   });
 
   app.get("/logout", function (req, res) {

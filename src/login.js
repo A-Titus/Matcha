@@ -26,22 +26,26 @@ router.post("/", urlencodedParser, (req, res) => {
   var username = req.body.username;
   var password = req.body.password;
 
-  con.query("SELECT * FROM user WHERE username = ?", [username], function (
-    err,
-    result
-  ) {
+  con.query("SELECT * FROM user WHERE username = ?", [username], function (err, result) {
     if (err) {
       console.log(err);
     } else if (result.length) {
       var db_user = result[0].username;
       var db_pass = result[0].password;
+      var setup = result[0].setup;
 
       if (username == db_user) {
         bcrypt.compare(password, db_pass, function (err, result) {
           if (result == true) {
             console.log("successfully logged in");
             req.session.user = username;            //set user session//
-            res.redirect("/setProfile");
+          if(setup == 1 ){
+            req.session.profile = "done";
+            res.redirect("/"); 
+          }
+                             //check if profile is already set up and redirec accordingly  
+            else
+              res.redirect("/setProfile");
           } else {
             console.log("Incorrect password");
             res.render("login", {msg: "Incorrect Password"});
