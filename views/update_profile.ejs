@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link
       rel="stylesheet"
       href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
@@ -31,112 +31,122 @@
           </ul>
         </div>
       </nav>
+
+      
+    <div class="updateProfilePic">
+      <form action="/updateProfile/profilePic" method="POST">
     
-    <div class="updateProfile3">
-    <label>Name</label>
-    <br />
-    <input type="text" name="name" class="form-control mb-3" />
-    <br />
-
-    <label>Surname</label>
-    <br />
-    <input
-      type="text"
-      name="surname"
-      id="data"
-      required
-      class="form-control mb-4"
-    />
-    <br />
-
-    <label>Username</label>
-    <br />
-    <input
-      type="text"
-      name="username"
-      id="data"
-      required
-      class="form-control mb-4"
-    />
-    <br />
-
-    <label>Email</label>
-    <br />
-    <input
-      type="email"
-      name="email"
-      id="data"
-      required
-      class="form-control mb-4"
-    />
-    <br />
-
-    <label>Password</label>
-    <br />
-    <input
-      type="password"
-      name="password"
-      id="data"
-      min="8"
-      required
-      class="form-control mb-4"
-    />
-    <br />
-
-    <label>Confirm Password</label>
-    <br />
-    <input
-      type="password"
-      name="conf_password"
-      id="data"
-      min="8"
-      required
-      class="form-control mb-4"
-    />
-    <br />
-    <div class="submitButton">
-      <br /><br />
-      <button type="submit" class="btn btn-danger btn-block my-4">
-        Update
-      </button>
+        <% if (profile_picture != null){ %>
+          <label for="profilePic">Profile Picture</label>
+          <br/>
+          <img class="profilePic" src="<%=profile_picture%>" alt="...">
+        
+        <% } %>
+         
+      <div class="images">
+        <p>Please upload an image using the upload form first</p>
+        <% if (photos != null){
+          if (photos !== []) {
+            for (var j = 0; j < photos.length; j++) { %>
+                <img src="<%=photos[j].image_path%>" class="image_display" id="<%=photos[j].img_id%>" alt="..." width="50" height="50">
+                <input type="radio" id="<%=photos[j].img_id%>"
+                 name="profilePic" value="<%=photos[j].img_id%>">
+            <%   }} 
+       } %>
       </div>
+        
+          <div class="profileButton"> 
+            <button type="submit" class="btn btn-danger btn-block my-4">Set profile pic</button>
+          </div>
+        </form>
+        </div>
+        
+    <div class="updateProfile3">
+        <div class="individualForms">
+        <form class="text-center border border-light p-4" action="/updateProfile/name" method="POST">
+            <label>Name</label>
+            <br />
+            <input type="text" name="name" class="form-control mb-3" />
+            <br />
+            <button type="submit" class="btn btn-danger btn-block my-4">Update</button>
+        </form>
+        </div>
+
+    <br /> <br />
+
+        <div class="individualForms">
+        <form class="text-center border border-light p-4" action="/updateProfile/surname" method="POST">
+            <label>Surname</label>
+            <br />
+            <input type="text" name="surname" class="form-control mb-4"/>
+            <br />
+            <button type="submit" class="btn btn-danger btn-block my-4">Update</button>
+        </form>
+        </div>
+
+    <br /> <br />
+        <div class="individualForms">
+        <form class="text-center border border-light p-4" action="/updateProfile/username" method="POST">
+            <label>Username</label>
+            <br />
+            <input type="text" name="username" class="form-control mb-4"/>
+            <br />
+            <button type="submit" class="btn btn-danger btn-block my-4">Update</button>
+        </form>
+        </div>
+
+    <br /> <br />
+        <div class="individualForms">
+        <form class="text-center border border-light p-4" action="/updateProfile/email" method="POST">
+            <label>Email</label>
+            <br />
+            <input type="email" name="email" class="form-control mb-4"/>
+            <br />
+            <button type="submit" class="btn btn-danger btn-block my-4">Update</button>
+        </form>
+        </div>
+
+    <br /> <br />
+
+        <div class="individualForms">
+        <form class="text-center border border-light p-4" action="/updateProfile/password" method="POST">
+            <label>Password</label>
+            <br />
+            <input type="password" name="password" min="8" class="form-control mb-4"/>
+            <br />
+
+            <label>Confirm Password</label>
+            <br />
+            <input type="password" name="conf_password" min="8" class="form-control mb-4"/>
+            <button type="submit" class="btn btn-danger btn-block my-4">Update</button>
+            <br />
+        </form>
+        </div>
 
     <div class="updateProfile">
-      <form
-      class="text-center border border-light p-4"
-        action="/setProfile"
-        method="POST"
-      >
+      <form class="text-center border border-light p-4" action="/updateProfile/userProfile" method="POST">
       <label for="bio">Gender:</label>
       <br />
-    <input type="radio" id="male"
-     name="gender" value="male">
+    <input type="radio" id="g_male" name="gender" value="male">
     <label for="male">Male</label>
 
-    <input type="radio" id="female"
-     name="gender" value="female">
+    <input type="radio" id="g_female" name="gender" value="female">
     <label for="female">Female</label>
 
-    <input type="radio" id="bisexual"
-     name="gender" value="bisexual">
+    <input type="radio" id="g_bisexual" name="gender" value="bisexual">
     <label for="bisexual">Bisexual</label>
 
     <hr />
       <br />
-      
-   
       <label for="pref_gender">Prefered Gender:</label>
       <br />
-    <input type="radio" id="male"
-     name="pref_gender" value="male">
+    <input type="radio" id="p_male" name="pref_gender" value="male">
     <label for="male">Male</label>
 
-    <input type="radio" id="female"
-     name="pref_gender" value="female">
+    <input type="radio" id="p_female" name="pref_gender" value="female">
     <label for="female">Female</label>
 
-    <input type="radio" id="bisexual"
-     name="pref_gender" value="bisexual">
+    <input type="radio" id="p_bisexual" name="pref_gender" value="bisexual">
     <label for="bisexual">Bisexual</label>
 
     <hr />
@@ -152,17 +162,16 @@
       </div>
       <br /><br /><br />
       <div class="submitButton">
-        <button type="submit" class="btn btn-danger btn-block my-4">
-          Update
-        </button>
+        <button type="submit" class="btn btn-danger btn-block my-4">Update</button>
       </div>
       </form>
     </div>
 
       <hr />
       <br />
+      
       <div class="updateProfile4">
-        <form action="/setProfile/interests" method="POST"> 
+        <form action="/updateProfile/interests" method="POST"> 
           <label for="interests">Interests</label>
           <input type="text" name="interests" id="interests" class="form-control mb-3"/>
           <br/>
@@ -172,7 +181,23 @@
             </button>
           </div>  
         </form>
-      </div>
+
+        <div class="displayTags">
+            <% if (tags != null){
+              if (tags !== []) {
+                for (var j = 0; j < tags.length; j++) { %>
+                  <div class="tagBlocks">
+                   <p><%=tags[j].interests%></p>
+                    <form action="/updateProfile/deleteInterest" method="POST">
+                        <button name="deleteTag" value="<%=tags[j].id%>" type="submit">x</button>
+                    </form>
+                </div>
+                <%   }} 
+           } %>
+           
+          </div>
+  
+        </div>
       
       <hr />
       <br /> 
@@ -189,18 +214,21 @@
         </form>
 
         <div class="row" id="rowPic" style="justify-content: left; margin-left: 4%;">
-          <% if (photos != null){
-            if (photos !== []) {
-              for (var j = 0; j < photos.length; j++) { %>
-              <div class="col-sm profil-gal">
-                  <img src="<%=photos[j].image_path%>" class="image_display" id="<%=photos[j].img_id%>" alt="...">
-                  <button onclick="deleteImage('<%=photos[j].img_id%>', '<%=photos[j].username%>')">delete</button>
-                      
-              </div>
-              <%   }} 
-         } %>
-      </div> 
-      </div>
+            <% if (photos != null){
+              if (photos !== []) {
+                for (var j = 0; j < photos.length; j++) { %>
+                <div class="col-sm profil-gal">
+                    <img src="<%=photos[j].image_path%>" class="image_display" id="<%=photos[j].img_id%>" alt="...">
+                    <form action="/updateProfile/delete" method="POST">
+                      <br/>
+                    <button name="deletebtn" value="<%=photos[j].img_id%>" type="submit">delete</button>
+                    </form>
+                        
+                </div>
+                <%   }} 
+           } %>
+        </div> 
+        </div>
     
   </body>
 </html>

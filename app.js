@@ -14,6 +14,8 @@ var setProfile = require('./src/set_profile');
 var upload = require('./src/upload');
 var profile = require('./src/profile');
 var updateProfile = require('./src/update_profile');
+var confirm = require('./src/confirm');
+var resetPassword = require('./src/reset_password');
 
 // app.get("*", function (req, res) {
 //   res.render("error");
@@ -32,6 +34,8 @@ app.use('/setProfile', setProfile);
 app.use('/uploads', upload); 
 app.use('/profile', profile); 
 app.use('/updateProfile', updateProfile); 
+app.use('/confirm', confirm); 
+app.use('/resetPassword', resetPassword);
 
 app.get("/", function (req, res) {
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
@@ -39,10 +43,11 @@ app.get("/", function (req, res) {
     res.render('registration', {msg: "Please register"});
   }
   else
-     if(req.session.profile == 'done')
-      res.render("home");
+     if(!req.session.profile)
+     res.redirect("/setProfile");
       else
-      res.render("set_profile", {photos: null, profile_pic: null})
+      res.render("home");
+     
   });
 
   app.get("/logout", function (req, res) {

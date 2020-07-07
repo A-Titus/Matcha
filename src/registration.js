@@ -29,6 +29,7 @@ router.post("/", urlencodedParser, function (req, res) {
   var email = req.body.email;
   var password = req.body.password;
   var conf_password = req.body.conf_password;
+  var key = Math.floor(Math.random() * 90000) + 10000;
 
   if (!name || !surname || !username || !email || !password || !conf_password) {
     console.log("all fields must be completed");
@@ -36,7 +37,6 @@ router.post("/", urlencodedParser, function (req, res) {
     return;
   }
 
-  //DO VALIDATIONS FOR NAME AND SURNAME
 
   if (
     !req.body.email.match(
@@ -48,9 +48,9 @@ router.post("/", urlencodedParser, function (req, res) {
     return;
   }
 
-  if (!req.body.password.match(/^[A-Za-z]\w{7,}$/)) {
+  if (!req.body.password.match("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})")) {
     console.log(
-      "Password must be atleast 8 characters long containing an uppercase character, lowecase character and a number "
+      "Password must be atleast 8 characters long containing an uppercase character, lowecase character a special character and a number "
     );
     res.render("registration");
     return;
@@ -62,14 +62,12 @@ router.post("/", urlencodedParser, function (req, res) {
     return;
   } else {
     var hashed_pass = bcrypt.hashSync(password, 15);
-    console.log(hashed_pass);
   }
 
   //check if username already exists.
   var sql =
     "SELECT count(*) as total FROM user WHERE username = ? OR email = ?";
   var query = con.query(sql, [username, email], function (err, result) {
-    console.log("Total Records:- " + result[0].total);
     if (result[0].total >= 1) {
       console.log("username or email already in use");
       res.render("registration");
@@ -81,6 +79,7 @@ router.post("/", urlencodedParser, function (req, res) {
         username: username,
         email: email,
         password: hashed_pass,
+        verifkey: key,
         verified: '0',
         setup: '0',
       };
@@ -93,9 +92,10 @@ router.post("/", urlencodedParser, function (req, res) {
         username: username,
       };
 
+
       con.query("INSERT INTO user_profile SET?", profile_record, function (err, result) {
         if (err) {
-          status = "Unable to create this user";
+          status = "Unable to create this user";  //set user profile to null intitially
           console.log(status);
           console.log(err);
         }
@@ -108,29 +108,35 @@ router.post("/", urlencodedParser, function (req, res) {
           console.log(err);
           res.render("registration");
         } else {
-            // var transporter = nodemailer.createTransport({
-            //     service: 'gmail',
-            //     auth: {
-            //       user: 'abdussamadtitus@gmail.com',
-            //       pass: 'Titusat@2000'
-            //     },
-            //     tls: { rejectUnauthorized: false }
-            //   });
+            var transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                  user: 'wtcmatcha2020@gmail.com',
+                  pass: 'Matcha123'
+                },
+                tls: { rejectUnauthorized: false }
+              });
+
               
-            //   var mailOptions = {
-            //     from: 'youremail@gmail.com',
-            //     to: 'waliwir382@vewku.com',
-            //     subject: 'Sending Email using Node.js',
-            //     text: 'That was easy!'
-            //   };
               
-            //   transporter.sendMail(mailOptions, function(error, info){
-            //     if (error) {
-            //       console.log(error);
-            //     } else {
-            //       console.log('Email sent: ' + info.response);
-            //     }
-            //   });  
+              var mailOptions = {
+                from: 'wtcmatcha2020@gmail.com',
+                to: email,
+                subject: 'Matcha email verification',
+                html: '<html><body><div align=center> \
+                CLICK ON THE FOLLOWING LINK TO VALIDATE YOUR ACCOUNT: <BR />\
+                <a href="http://localhost:3000/confirm?user='+username +'&key='+key +'">Confirm your Account</a> \
+                </div></body></html>'
+              };
+              
+              transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                  console.log(error);
+                } else {
+                  console.log('Email sent: ' + info.response);
+                  console.log("plese check your email");
+                }
+              });  
 
           res.redirect("/login");
         }

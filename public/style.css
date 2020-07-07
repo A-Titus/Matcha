@@ -16,7 +16,7 @@
     height: 90%;
     text-align: center;
     position: relative;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 3%;
@@ -43,7 +43,7 @@ body, html{
     height: 95%;
     text-align: center;
     position: relative;
-    top: 45%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 3%;
@@ -53,10 +53,10 @@ body, html{
 
 .setProfile2 {
     width: 50%;
-    height: 135%;
+    height: 150%;
     text-align: center;
     position: relative;
-    top: 60%;
+    top: 78%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 3%;
@@ -79,10 +79,10 @@ body, html{
 
 .setProfile4 {
     width: 50%;
-    height: 40%;
+    height: 45%;
     text-align: center;
     position: relative;
-    top: 15%;
+    top: 28%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 3%;
@@ -92,10 +92,22 @@ body, html{
 
 .setProfilePic {
     width: 50%;
+    height: 100%;
+    text-align: center;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 3%;
+    border: 1px solid rgb(131, 130, 130);
+    background-color: white;
+}
+.updateProfilePic {
+    width: 45%;
     height: 85%;
     text-align: center;
     position: relative;
-    top: 37%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 3%;
@@ -118,7 +130,7 @@ body, html{
 
 .profilePic {
     width: 35%;
-    height: 25%;
+    height: auto;
     position: fixed;
     top: 6%;
     left: 35%;
@@ -152,10 +164,10 @@ body, html{
 
 .updateProfile {
     width: 100%;
-    height: 95%;
+    height: 60%;
     text-align: center;
     position: relative;
-    top: 65%;
+    top: 37%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 3%;
@@ -165,10 +177,10 @@ body, html{
 
 .updateProfile2 {
     width: 100%;
-    height: 135%;
+    height: 110%;
     text-align: center;
     position: relative;
-    top: 80%;
+    top: 63%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 3%;
@@ -178,23 +190,23 @@ body, html{
 
 .updateProfile3{
     width: 45%;
-    height: 90%;
+    height: 140%;
     text-align: center;
     position: relative;
-    top: 45%;
+    top: 80%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border-radius: 3%;
-    background-color: white;
-    border: 1px solid gray;
+    /* border-radius: 3%; */
+    /* background-color: white; */
+    /* border: 1px solid gray; */
 }
 
 .updateProfile4 {
     width: 100%;
-    height: 40%;
+    height: 35%;
     text-align: center;
     position: relative;
-    top: 35%;
+    top: 25%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 3%;
@@ -202,10 +214,27 @@ body, html{
     background-color: white;
 }
 
+.individualForms{
+    border-radius: 3%;
+    border: 1px solid rgb(131, 130, 130);
+    background-color: white;
+}
+
+.resetPassword {
+    border-radius: 3%;
+    border: 1px solid rgb(131, 130, 130);
+    background-color: white;
+    position: relative;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    padding: 2%;
+}
 
 .profileButton {
     position: fixed;
-    top: 70%;
+    top: 75%;
     left: 50%;
     transform: translate(-50%, 280%);
     width: 100%;
@@ -225,8 +254,29 @@ body, html{
     transform: translate(-50%, -50%);
 }
 
+
+.displayTags {
+    width: 100%;
+    height: 50%;
+    margin-top: 3%;
+    margin-left: 3%;
+    margin-right: 3%;
+    float: left;
+    display: table;
+}
+
+.tagBlocks {
+    width: 31%;
+    background-color: #b9b9b9;
+    margin-top: 2%;
+    float: inherit;
+    border: 1px solid white;
+    border-radius: 2%;
+    word-wrap: break-word; 
+}
+
+
 .topnav {
-    
     color: #f2f2f2;
     text-align: right;
     padding: 14px 16px;
@@ -244,8 +294,71 @@ body, html{
     border-radius: 3%;
     border: 1px solid gray;
     width: 25%;
-    height: 35%;
+    height: auto;
     margin-top: 3%;
 }
 
-  
+.completeProfile {
+    position: fixed;
+    top: 93%;
+    left: 50%;
+    transform: translate(-50%, 280%);
+    width: 100%;
+    margin-bottom: 15%;
+}
+
+.forgotPassword {
+    position: fixed;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, 280%);
+    width: 30%;
+}
+
+.userInfo1 {
+    position: unset;
+    top: 0%;
+    left: 50%;
+    transform: translate(21%, 95%);
+    width: 30%;
+    border: 1px solid grey;
+    border-radius: inherit;
+    width: 70%;
+}
+
+.userInfoTags {
+    width: 100%;
+    height: 25%;
+    margin-top: 3%;
+    margin-left: 3%;
+    margin-right: 3%;
+    float: left;
+    display: table;
+}
+
+.bio {
+    position: fixed;
+    top: 10%;
+    left: 0%;
+    transform: translate(21%, 90%);
+    width: 30%;
+    height: 20%;
+    border: 1px solid grey;
+    border-radius: inherit;
+    width: 70%;
+}
+
+.userInfoImgdisplay {
+    border-radius: 3%;
+    border: 1px solid gray;
+    width: 30%;
+    height: auto;
+    margin-top: 3%;
+}
+
+.userImgdisplay {
+    transform: translate(21%, 155%);
+    width: 30%;
+    height: 20%;
+    width: 70%;
+}
