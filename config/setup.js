@@ -33,7 +33,7 @@ function database() {
       console.log("user Table created");
     });
 
-    var sql = "CREATE TABLE IF NOT EXISTS images (img_id int(11) AUTO_INCREMENT PRIMARY KEY, image_name varchar(255) , image_path varchar(255) , username varchar(255), profile_pic boolean)";
+    var sql = "CREATE TABLE IF NOT EXISTS images (id int(11) AUTO_INCREMENT PRIMARY KEY, image_name varchar(255) , image_path varchar(255) , username varchar(255), profile_pic boolean)";
     con.query(sql, function (err, result) {
       if (err) throw err;
       console.log("image Table created");
@@ -50,6 +50,12 @@ function database() {
         if (err) throw err;
         console.log("message Table created");
       });
+
+      var sql = " CREATE TABLE IF NOT EXISTS  faker_users (img_id int(11) AUTO_INCREMENT PRIMARY KEY , images varchar(255) , name VARCHAR(255), surname VARCHAR(255) , username varchar(255) , email varchar(255))";
+      con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("Table created");
+});
 
   });
 
