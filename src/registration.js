@@ -10,6 +10,43 @@ var router = express.Router();
 var bcrypt = require("bcrypt");
 var con = require("../config/connection");
 
+con.getConnection((error, connect) => 
+{ 
+            function generateUsers() {
+                let users = []
+                for (let id=1; id <= 500; id++) {
+                let firstName = faker.name.firstName();
+                  let lastName = faker.name.lastName();
+                  let email = faker.internet.email();
+                  sql = "INSERT INTO lpnwzqqm.faker_users (user_first_name, user_last_name) VALUES (?, ?)";
+                  connect.query(sql, [firstName, lastName ],function (err, result) {
+                    if (err) throw err;
+                    console.log(result);
+                    
+                    
+                   res.send(result)
+                  users.push({
+                     "id": id,
+                      "first_name": firstName,
+                      "last_name": lastName,
+                      "email": email
+                  });
+                  console.log('100 records inserted!');
+                })
+              
+                //return { "data": users }
+                }
+       
+            }
+             generateUsers()
+});
+
+  var sql = " CREATE TABLE IF NOT EXISTS  faker_users (user_first_name VARCHAR(255), user_last_name VARCHAR(255))";
+  con.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("Table created");
+  });
+
 con.connect(function (err) {
   if (err) {
     console.log("Unable to connect to the database");

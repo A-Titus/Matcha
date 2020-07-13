@@ -17,7 +17,7 @@ app.use(function (request, results, next){
     next();
 });
 
-// API to return alll messages
+// API to return all messages
 app.post("/get_messages", function(request, result){
 //get all messages from DB
     con.query("SELECT * FROM messages WHERE (sender = '" + request.body.receiver + "' AND receiver = '"+ request.body.sender +"')", function (error, messages){
@@ -26,7 +26,7 @@ app.post("/get_messages", function(request, result){
     });
 });
 
-//enable URL encoded for POST request
+//enable URL encoded for POST request 
 app.use(bodyParser.urlencoded());
 
 var users =[];
