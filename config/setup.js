@@ -33,7 +33,7 @@ function database() {
       console.log("user Table created");
     });
 
-    var sql = "CREATE TABLE IF NOT EXISTS images (id int(11) AUTO_INCREMENT PRIMARY KEY, image_name varchar(255) , image_path varchar(255) , username varchar(255), profile_pic boolean)";
+    var sql = "CREATE TABLE IF NOT EXISTS images (image_id int(11) AUTO_INCREMENT PRIMARY KEY, image_name varchar(255) , image_path varchar(255) , username varchar(255), profile_pic boolean)";
     con.query(sql, function (err, result) {
       if (err) throw err;
       console.log("image Table created");

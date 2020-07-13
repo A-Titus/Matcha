@@ -26,6 +26,10 @@ app.post("/get_messages", function(request, result){
     });
 });
 
+app.get('/chat', function (req, res) {
+    res.send('GET request to the homepage')
+  });
+
 //enable URL encoded for POST request 
 app.use(bodyParser.urlencoded());
 

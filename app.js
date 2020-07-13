@@ -33,7 +33,7 @@ app.use('/setProfile', setProfile);
 app.use('/uploads', upload); 
 app.use('/profile', profile); 
 app.use('/updateProfile', updateProfile); 
-app.use('../chat', chat);
+app.use('/chat', chat);
 app.use(bodyParser.urlencoded());
 
 
