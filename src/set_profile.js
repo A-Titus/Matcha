@@ -33,20 +33,20 @@ router.get("/", function (req, res) {
               con.query("SELECT * FROM `interests` WHERE `username` = ?", req.session.user, function(err, tags, fields){
                 if (err) throw err;
                   if (profile_picture.length && tags.length && userProfile[0].gender) {
-                      res.render("set_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path, tags: tags, msg: null});
+                      res.render("set_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path, tags: tags, msg: null, errMsg: req.session.Msg});
                   }else if(!profile_picture.length && tags.length && userProfile[0].gender){
-                      res.render("set_profile", {username: req.session.user, photos: result, profile_picture: "https://az-pe.com/wp-content/uploads/2018/05/kemptons-blank-profile-picture.jpg",tags: tags, msg: "you need to add a profile pic"});
+                      res.render("set_profile", {username: req.session.user, photos: result, profile_picture: "https://az-pe.com/wp-content/uploads/2018/05/kemptons-blank-profile-picture.jpg",tags: tags, msg: "you need to add a profile pic", errMsg: req.session.Msg});
                   }else if(profile_picture.length && !tags.length && userProfile[0].gender){
-                      res.render("set_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path,tags: null, msg: "you need to add atleast 1 interest"});
+                      res.render("set_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path,tags: null, msg: "you need to add atleast 1 interest", errMsg: req.session.Msg});
                   }else if(profile_picture.length && tags.length && !userProfile[0].gender){
-                      res.render("set_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path,tags: tags, msg: "You need to complete the user profile"});
+                      res.render("set_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path,tags: tags, msg: "You need to complete the user profile", errMsg: req.session.Msg});
                   }else if(!profile_picture.length && tags.length && !userProfile[0].gender){
-                    res.render("set_profile", {username: req.session.user, photos: result, profile_picture: "https://az-pe.com/wp-content/uploads/2018/05/kemptons-blank-profile-picture.jpg",tags: tags, msg: "you need to add a profile pic and complete your user profile"});
+                    res.render("set_profile", {username: req.session.user, photos: result, profile_picture: "https://az-pe.com/wp-content/uploads/2018/05/kemptons-blank-profile-picture.jpg",tags: tags, msg: "you need to add a profile pic and complete your user profile", errMsg: req.session.Msg});
                   }else if(profile_picture.length && !tags.length && !userProfile[0].gender){
-                    res.render("set_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path,tags: null, msg: "you need to add atleast 1 interest aswell as complete the user profile"});
+                    res.render("set_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path,tags: null, msg: "you need to add atleast 1 interest aswell as complete the user profile", errMsg: req.session.Msg});
                   }
                   else{
-                      res.render("set_profile", {username: req.session.user, photos: result, profile_picture: "https://az-pe.com/wp-content/uploads/2018/05/kemptons-blank-profile-picture.jpg",tags: null, msg: "you need to add a profile pic as well as atleast 1 interest and complete the user profile"});
+                      res.render("set_profile", {username: req.session.user, photos: result, profile_picture: "https://az-pe.com/wp-content/uploads/2018/05/kemptons-blank-profile-picture.jpg",tags: null, msg: "you need to add a profile pic as well as atleast 1 interest and complete the user profile", errMsg: req.session.Msg});
                   }
               })   
             }
@@ -66,6 +66,7 @@ router.get("/", function (req, res) {
     con.query("UPDATE user_profile SET gender = ?, pref_gender = ?, bio = ?, age = ? WHERE username = ?", [gender, pref_gender, bio, age, req.session.user], function (err, result) {
       if (err) {
         status = "Unable to submit data";
+        req.session.Msg = "unable to submit data";
         console.log(status);
         console.log(err);
         res.redirect("/setProfile");
@@ -95,6 +96,7 @@ router.get("/", function (req, res) {
     con.query(sql, req.session.user, function (err, result) {
     if (result[0].total >= 6) {
       console.log("Max tag limit reached");
+      req.session.Msg = "Max tag limit reached";
       res.redirect("/setProfile");
       return;
     } else {
@@ -106,6 +108,7 @@ router.get("/", function (req, res) {
           res.redirect("/setProfile");
         }else{
           console.log("interest successfully added");
+          req.session.Msg = null;
           res.redirect("/setProfile");
         }
         })  

@@ -41,20 +41,20 @@ router.get("/", function (req, res) {
             con.query("SELECT * FROM `interests` WHERE `username` = ?", req.session.user, function(err, tags, fields){
               if (err) throw err;
                 if (profile_picture.length && tags.length && userProfile[0].gender) {
-                    res.render("update_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path, tags: tags, msg: null, name: user[0].name, surname: user[0].surname, email: user[0].email, username: user[0].username});
+                    res.render("update_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path, tags: tags, msg: null, name: user[0].name, surname: user[0].surname, email: user[0].email, username: user[0].username, errMsg: req.session.Msg});
                 }else if(!profile_picture.length && tags.length && userProfile[0].gender){
-                    res.render("update_profile", {username: req.session.user, photos: result, profile_picture: "https://az-pe.com/wp-content/uploads/2018/05/kemptons-blank-profile-picture.jpg",tags: tags, msg: "you need to add a profile pic", name: user[0].name, surname: user[0].surname, email: user[0].email, username: user[0].username});
+                    res.render("update_profile", {username: req.session.user, photos: result, profile_picture: "https://az-pe.com/wp-content/uploads/2018/05/kemptons-blank-profile-picture.jpg",tags: tags, msg: "you need to add a profile pic", name: user[0].name, surname: user[0].surname, email: user[0].email, username: user[0].username, errMsg: req.session.Msg});
                 }else if(profile_picture.length && !tags.length && userProfile[0].gender){
-                    res.render("update_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path,tags: null, msg: "you need to add atleast 1 interest", name: user[0].name, surname: user[0].surname, email: user[0].email, username: user[0].username});
+                    res.render("update_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path,tags: null, msg: "you need to add atleast 1 interest", name: user[0].name, surname: user[0].surname, email: user[0].email, username: user[0].username, errMsg: req.session.Msg});
                 }else if(profile_picture.length && tags.length && !userProfile[0].gender){
-                    res.render("update_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path,tags: tags, msg: "You need to complete the user profile", name: user[0].name, surname: user[0].surname, email: user[0].email, username: user[0].username});
+                    res.render("update_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path,tags: tags, msg: "You need to complete the user profile", name: user[0].name, surname: user[0].surname, email: user[0].email, username: user[0].username, errMsg: req.session.Msg});
                 }else if(!profile_picture.length && tags.length && !userProfile[0].gender){
-                  res.render("update_profile", {username: req.session.user, photos: result, profile_picture: "https://az-pe.com/wp-content/uploads/2018/05/kemptons-blank-profile-picture.jpg",tags: tags, msg: "you need to add a profile pic and complete your user profile", name: user[0].name, surname: user[0].surname, email: user[0].email, username: user[0].username});
+                  res.render("update_profile", {username: req.session.user, photos: result, profile_picture: "https://az-pe.com/wp-content/uploads/2018/05/kemptons-blank-profile-picture.jpg",tags: tags, msg: "you need to add a profile pic and complete your user profile", name: user[0].name, surname: user[0].surname, email: user[0].email, username: user[0].username, errMsg: req.session.Msg});
                 }else if(profile_picture.length && !tags.length && !userProfile[0].gender){
-                  res.render("update_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path,tags: null, msg: "you need to add atleast 1 interest aswell as complete the user profile", name: user[0].name, surname: user[0].surname, email: user[0].email, username: user[0].username});
+                  res.render("update_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path,tags: null, msg: "you need to add atleast 1 interest aswell as complete the user profile", name: user[0].name, surname: user[0].surname, email: user[0].email, username: user[0].username, errMsg: req.session.Msg});
                 }
                 else{
-                    res.render("update_profile", {username: req.session.user, photos: result, profile_picture: "https://az-pe.com/wp-content/uploads/2018/05/kemptons-blank-profile-picture.jpg",tags: null, msg: "you need to add a profile pic as well as atleast 1 interest and complete the user profile", name: user[0].name, surname: user[0].surname, email: user[0].email, username: user[0].username});
+                    res.render("update_profile", {username: req.session.user, photos: result, profile_picture: "https://az-pe.com/wp-content/uploads/2018/05/kemptons-blank-profile-picture.jpg",tags: null, msg: "you need to add a profile pic as well as atleast 1 interest and complete the user profile", name: user[0].name, surname: user[0].surname, email: user[0].email, username: user[0].username, errMsg: req.session.Msg});
                   }
                 })   
               }
@@ -122,6 +122,7 @@ router.post("/username", urlencodedParser, function (req, res) {
       var query = con.query(sql, username, function (err, result) {
       if (result[0].total >= 1) {
           console.log("username already in use");
+          req.session.Msg = "username already in use";
           res.redirect("/updateProfile");
           return;
     } else {
@@ -133,8 +134,31 @@ router.post("/username", urlencodedParser, function (req, res) {
                   res.redirect("/updateProfile");
               } else {
                   console.log("username updated");
-                  req.session.user = username;
-                  res.redirect("/updateProfile");
+                  var old_username = req.session.user;
+                  con.query("UPDATE user_profile SET username = ? WHERE username = ? ", [username, old_username], function (err, result) {
+                    if (err){
+                      console.log(err);
+                      res.redirect("/updateProfile");
+                    }
+                  });
+
+                  con.query("UPDATE images SET username = ? WHERE username = ? ", [username, old_username], function (err, result) {
+                    if (err){
+                      console.log(err);
+                      res.redirect("/updateProfile");
+                    }
+                  });
+
+                  con.query("UPDATE interests SET username = ? WHERE username = ? ", [username, old_username], function (err, result) {
+                    if (err){
+                      console.log(err);
+                      res.redirect("/updateProfile");
+                    }
+                  });
+
+                req.session.Msg = null;
+                req.session.user = username;
+                res.redirect("/updateProfile");   
               }
           });
       }
@@ -147,6 +171,7 @@ router.post("/email", urlencodedParser, function (req, res) {
 
     if (!req.body.email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
         console.log("The format of the email address is incorrect");
+        req.session.Msg = "The format of the email address is incorrect";
         res.redirect("/updateProfile");
     }
 
@@ -154,6 +179,7 @@ router.post("/email", urlencodedParser, function (req, res) {
         var query = con.query(sql, email, function (err, result) {
         if (result[0].total >= 1) {
             console.log("email already in use");
+            req.session.Msg = "email already in use";
             res.redirect("/updateProfile");
             return;
       } else {
@@ -166,6 +192,7 @@ router.post("/email", urlencodedParser, function (req, res) {
                     res.redirect("/updateProfile");
                 } else {
                     console.log("email updated");
+                    req.session.Msg = null;
 
                     var transporter = nodemailer.createTransport({
                         service: 'gmail',
@@ -208,12 +235,14 @@ router.post("/email", urlencodedParser, function (req, res) {
 
     if (!password.match("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})")) {
         console.log("Password must be atleast 8 characters long containing an uppercase character, lowecase character a special character and a number ");
+        req.session.Msg = "Password must be atleast 8 characters long containing an uppercase character, lowecase character a special character and a number ";
         res.redirect("/updateProfile");
         return;
       }
     
       if (password !== conf_password) {
         console.log("Passswords do not match");
+        req.session.Msg = "Passswords do not match";
         res.redirect("/updateProfile");
         return;
       } else {
@@ -229,6 +258,7 @@ router.post("/email", urlencodedParser, function (req, res) {
                 res.redirect("/updateProfile");
               } else {
                 console.log("password updated");
+                req.session.Msg = "Passsword updated successfully";
                 res.redirect("/updateProfile");
               }
             }
@@ -255,6 +285,7 @@ router.post('/userProfile',urlencodedParser, function (req, res) {
         res.redirect("/updateProfile");
       } else {
         console.log("data uploaded succesfully") ;
+        req.session.Msg = "Profile updated successfully";
         res.redirect("/updateProfile");
       }
     });
@@ -280,6 +311,7 @@ router.post('/userProfile',urlencodedParser, function (req, res) {
     con.query(sql, req.session.user, function (err, result) {
     if (result[0].total >= 6) {
       console.log("Max tag limit reached");
+      req.session.Msg = "Max tag limit reached";
       res.redirect("/updateProfile");
       return;
     } else {
@@ -291,6 +323,7 @@ router.post('/userProfile',urlencodedParser, function (req, res) {
                 res.redirect("/updateProfile");
             }else{
                 console.log("interest successfully added");
+                req.session.Msg = null;
                 res.redirect("/updateProfile");
             }
         })
@@ -321,6 +354,7 @@ router.post('/userProfile',urlencodedParser, function (req, res) {
         console.log(err);
         res.redirect("/updateProfile");
       } else { 
+        req.session.Msg = null;
         console.log("Profile Pic updated succesfully");
         res.redirect("/updateProfile");
       }
@@ -340,12 +374,14 @@ router.post('/delete',urlencodedParser, function (req, res) {
                   console.log(err);
                   res.redirect("/updateProfile");
                 } else {
+                  req.session.Msg = null;
                   console.log(" Pic deleted succesfully");
                   res.redirect("/updateProfile");
                 }
               })
         }else{
             console.log("Minimum of 1 pic required");
+            req.session.Msg = "Minimum of 1 pic required, please add another image before deleting this one";
             res.redirect("/updateProfile"); 
         }
     });
@@ -369,6 +405,7 @@ router.post('/delete',urlencodedParser, function (req, res) {
             })
         }else{
             console.log("Minimum of 1 interest required");
+            req.session.Msg = "Minimum of 1 interest required, please add another tag before deleting this one";
             res.redirect("/updateProfile"); 
         }
     });

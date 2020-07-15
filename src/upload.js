@@ -63,6 +63,7 @@ router.post("/", upload.single("image"), (req, res, next) => {
   con.query(sql, req.session.user, function (err, result) {
   if (result[0].total >= 5) {
     console.log("Max number of images reached");
+    req.session.Msg = "Max number of images reached";
     if (req.session.profile == "done") res.redirect("/updateProfile");
     else res.redirect("/setprofile");
     return;
@@ -76,6 +77,7 @@ router.post("/", upload.single("image"), (req, res, next) => {
         else res.redirect("/setprofile");
       } else {
         console.log("image added successfully");
+        req.session.Msg = null;
         if (req.session.profile == "done") res.redirect("/updateProfile");
         else res.redirect("/setprofile");
       }
