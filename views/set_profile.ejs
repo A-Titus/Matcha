@@ -28,7 +28,9 @@
       </div>
     </nav>
 
-  
+  <div class="errorMsg">
+    <p><%=msg%></p>
+  </div>
 
 <div class="setProfilePic">
   <form action="/setProfile/profilePic" method="POST">
@@ -121,7 +123,7 @@
       <div class="setProfile4">
         <form action="/setProfile/interests" method="POST"> 
           <label for="interests">Interests</label>
-          <input type="text" name="interests" id="interests" class="form-control mb-3"/>
+          <input type="text" name="interests" id="interests" class="form-control mb-3" required/>
           <br/>
           <div class="submitButton">
             <button type="submit" class="btn btn-danger btn-block my-4">

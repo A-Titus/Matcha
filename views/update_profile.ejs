@@ -32,6 +32,10 @@
         </div>
       </nav>
 
+      <div class="errorMsg">
+        <p><%=msg%></p>
+      </div>
+    
       
     <div class="updateProfilePic">
       <form action="/updateProfile/profilePic" method="POST">
@@ -66,7 +70,7 @@
         <form class="text-center border border-light p-4" action="/updateProfile/name" method="POST">
             <label>Name</label>
             <br />
-            <input type="text" name="name" class="form-control mb-3" />
+            <input type="text" name="name" required class="form-control mb-3" placeholder="<%=name%>"/>
             <br />
             <button type="submit" class="btn btn-danger btn-block my-4">Update</button>
         </form>
@@ -78,7 +82,7 @@
         <form class="text-center border border-light p-4" action="/updateProfile/surname" method="POST">
             <label>Surname</label>
             <br />
-            <input type="text" name="surname" class="form-control mb-4"/>
+            <input type="text" name="surname" required class="form-control mb-4" placeholder="<%=surname%>"/>
             <br />
             <button type="submit" class="btn btn-danger btn-block my-4">Update</button>
         </form>
@@ -89,7 +93,7 @@
         <form class="text-center border border-light p-4" action="/updateProfile/username" method="POST">
             <label>Username</label>
             <br />
-            <input type="text" name="username" class="form-control mb-4"/>
+            <input type="text" name="username" required class="form-control mb-4" placeholder="<%=username%>"/>
             <br />
             <button type="submit" class="btn btn-danger btn-block my-4">Update</button>
         </form>
@@ -100,7 +104,7 @@
         <form class="text-center border border-light p-4" action="/updateProfile/email" method="POST">
             <label>Email</label>
             <br />
-            <input type="email" name="email" class="form-control mb-4"/>
+            <input type="email" name="email" required class="form-control mb-4" placeholder="<%=email%>"/>
             <br />
             <button type="submit" class="btn btn-danger btn-block my-4">Update</button>
         </form>
@@ -112,12 +116,12 @@
         <form class="text-center border border-light p-4" action="/updateProfile/password" method="POST">
             <label>Password</label>
             <br />
-            <input type="password" name="password" min="8" class="form-control mb-4"/>
+            <input type="password" name="password" required min="8" class="form-control mb-4"/>
             <br />
 
             <label>Confirm Password</label>
             <br />
-            <input type="password" name="conf_password" min="8" class="form-control mb-4"/>
+            <input type="password" name="conf_password" required min="8" class="form-control mb-4"/>
             <button type="submit" class="btn btn-danger btn-block my-4">Update</button>
             <br />
         </form>
@@ -127,38 +131,38 @@
       <form class="text-center border border-light p-4" action="/updateProfile/userProfile" method="POST">
       <label for="bio">Gender:</label>
       <br />
-    <input type="radio" id="g_male" name="gender" value="male">
+    <input type="radio" id="g_male" name="gender" value="male" required>
     <label for="male">Male</label>
 
-    <input type="radio" id="g_female" name="gender" value="female">
+    <input type="radio" id="g_female" name="gender" value="female" required>
     <label for="female">Female</label>
 
-    <input type="radio" id="g_bisexual" name="gender" value="bisexual">
+    <input type="radio" id="g_bisexual" name="gender" value="bisexual" required>
     <label for="bisexual">Bisexual</label>
 
     <hr />
       <br />
       <label for="pref_gender">Prefered Gender:</label>
       <br />
-    <input type="radio" id="p_male" name="pref_gender" value="male">
+    <input type="radio" id="p_male" name="pref_gender" value="male" required>
     <label for="male">Male</label>
 
-    <input type="radio" id="p_female" name="pref_gender" value="female">
+    <input type="radio" id="p_female" name="pref_gender" value="female" required>
     <label for="female">Female</label>
 
-    <input type="radio" id="p_bisexual" name="pref_gender" value="bisexual">
+    <input type="radio" id="p_bisexual" name="pref_gender" value="bisexual" required>
     <label for="bisexual">Bisexual</label>
 
     <hr />
     <label for="age">Age</label>
-    <input type="number" id="age" name="age" min="18" max="70">
+    <input type="number" id="age" name="age" min="18" max="70" required>
 
     <hr />
       <br />
     
       <div class="form-group">
         <label for="bio">Bio:</label>
-        <textarea class="form-control" rows="5" id="bio" name="bio"></textarea>
+        <textarea class="form-control" rows="5" id="bio" name="bio" required></textarea>
       </div>
       <br /><br /><br />
       <div class="submitButton">
@@ -173,7 +177,7 @@
       <div class="updateProfile4">
         <form action="/updateProfile/interests" method="POST"> 
           <label for="interests">Interests</label>
-          <input type="text" name="interests" id="interests" class="form-control mb-3"/>
+          <input type="text" name="interests" id="interests" class="form-control mb-3" required/>
           <br/>
           <div class="submitButton">
             <button type="submit" class="btn btn-danger btn-block my-4">

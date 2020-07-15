@@ -19,7 +19,7 @@ con.connect(function (err) {
 });
 
 router.get("/", function (req, res) {
-  res.render("registration");
+  res.render("registration", {msg: null});
 });
 
 router.post("/", urlencodedParser, function (req, res) {
@@ -33,10 +33,9 @@ router.post("/", urlencodedParser, function (req, res) {
 
   if (!name || !surname || !username || !email || !password || !conf_password) {
     console.log("all fields must be completed");
-    res.render("registration");
+    res.render("registration", {msg: "fileds missing"});
     return;
   }
-
 
   if (
     !req.body.email.match(
@@ -44,7 +43,7 @@ router.post("/", urlencodedParser, function (req, res) {
     )
   ) {
     console.log("The format of the email address is incorrect");
-    res.render("registration");
+    res.render("registration", {msg: "The format of the email address is incorrect"});
     return;
   }
 
@@ -52,13 +51,13 @@ router.post("/", urlencodedParser, function (req, res) {
     console.log(
       "Password must be atleast 8 characters long containing an uppercase character, lowecase character a special character and a number "
     );
-    res.render("registration");
+    res.render("registration", {msg: "Password must be atleast 8 characters long containing an uppercase character, lowecase character a special character and a number "});
     return;
   }
 
   if (req.body.password !== req.body.conf_password) {
     console.log("Passswords do not match");
-    res.render("registration");
+    res.render("registration", {msg: "Passwords do not match"});
     return;
   } else {
     var hashed_pass = bcrypt.hashSync(password, 15);
@@ -70,7 +69,7 @@ router.post("/", urlencodedParser, function (req, res) {
   var query = con.query(sql, [username, email], function (err, result) {
     if (result[0].total >= 1) {
       console.log("username or email already in use");
-      res.render("registration");
+      res.render("registration", {msg: "username or email already in use"});
       return;
     } else {
       var user_record = {
@@ -106,7 +105,7 @@ router.post("/", urlencodedParser, function (req, res) {
           status = "Unable to create this user";
           console.log(status);
           console.log(err);
-          res.render("registration");
+          res.render("registration", {msg: "unabel to create this user"});
         } else {
             var transporter = nodemailer.createTransport({
                 service: 'gmail',
@@ -138,7 +137,7 @@ router.post("/", urlencodedParser, function (req, res) {
                 }
               });  
 
-          res.redirect("/login");
+          res.render("login", {msg: "please check your emails to verify your account"});
         }
       });
     }

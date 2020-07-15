@@ -4,7 +4,6 @@ var bodyParser = require("body-parser");
 const multer = require('multer');
 const path = require('path');
 
-
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 var router = express.Router();
@@ -25,30 +24,38 @@ router.get("/", function (req, res) {
     res.render("login",{msg: "Please log in"});
       }
       else{
+        con.query("SELECT * FROM `user_profile` WHERE `username` = ?", req.session.user, function (err, userProfile, fields) {
+          if (err) throw err;
         con.query("SELECT * FROM `images` WHERE `username` = ?", req.session.user, function (err, result, fields) {
           if (err) throw err;
           con.query("SELECT * FROM `images` WHERE `username` = ? AND  `profile_pic` = 1", req.session.user, function (err, profile_picture, fields) {
               if (err) throw err;
               con.query("SELECT * FROM `interests` WHERE `username` = ?", req.session.user, function(err, tags, fields){
-                  if (err) throw err;
-                      if (profile_picture.length && tags.length) {
-                          res.render("set_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path, tags: tags});
-                      }else if(!profile_picture.length && tags.length){
-                          res.render("set_profile", {username: req.session.user, photos: result, profile_picture: "https://az-pe.com/wp-content/uploads/2018/05/kemptons-blank-profile-picture.jpg",tags: tags});
-                      }else if(profile_picture.length && !tags.length){
-                          res.render("set_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path,tags: null});
-                      }else{
-                          res.render("set_profile", {username: req.session.user, photos: result, profile_picture: "https://az-pe.com/wp-content/uploads/2018/05/kemptons-blank-profile-picture.jpg",tags: null});
-                      }
-              })
-                 
+                if (err) throw err;
+                  if (profile_picture.length && tags.length && userProfile[0].gender) {
+                      res.render("set_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path, tags: tags, msg: null});
+                  }else if(!profile_picture.length && tags.length && userProfile[0].gender){
+                      res.render("set_profile", {username: req.session.user, photos: result, profile_picture: "https://az-pe.com/wp-content/uploads/2018/05/kemptons-blank-profile-picture.jpg",tags: tags, msg: "you need to add a profile pic"});
+                  }else if(profile_picture.length && !tags.length && userProfile[0].gender){
+                      res.render("set_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path,tags: null, msg: "you need to add atleast 1 interest"});
+                  }else if(profile_picture.length && tags.length && !userProfile[0].gender){
+                      res.render("set_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path,tags: tags, msg: "You need to complete the user profile"});
+                  }else if(!profile_picture.length && tags.length && !userProfile[0].gender){
+                    res.render("set_profile", {username: req.session.user, photos: result, profile_picture: "https://az-pe.com/wp-content/uploads/2018/05/kemptons-blank-profile-picture.jpg",tags: tags, msg: "you need to add a profile pic and complete your user profile"});
+                  }else if(profile_picture.length && !tags.length && !userProfile[0].gender){
+                    res.render("set_profile", {username: req.session.user, photos: result, profile_picture: profile_picture[0].image_path,tags: null, msg: "you need to add atleast 1 interest aswell as complete the user profile"});
+                  }
+                  else{
+                      res.render("set_profile", {username: req.session.user, photos: result, profile_picture: "https://az-pe.com/wp-content/uploads/2018/05/kemptons-blank-profile-picture.jpg",tags: null, msg: "you need to add a profile pic as well as atleast 1 interest and complete the user profile"});
+                  }
+              })   
             }
           );
         }
       );
-    }
-  });
-
+    })
+  }
+});
   
   router.post('/',urlencodedParser, function (req, res) {
     var gender = req.body.gender;
@@ -109,12 +116,16 @@ router.get("/", function (req, res) {
   router.post('/complete',urlencodedParser, function (req, res){
     con.query("SELECT * FROM user_profile WHERE username = ?", [req.session.user], function (err, result) {
       if (err) throw err;
-        con.query("SELECT count(*) as total FROM interests WHERE username = ?", [req.session.user], function (err, interests) {
+        con.query("SELECT count(*) as total FROM interests WHERE username = ?", [req.session.user], function (err, interestsCount) {
           if (err) throw err;
-            con.query("SELECT count(*) as total FROM images WHERE username = ?", [req.session.user], function (err, images) {
+            con.query("SELECT count(*) as total FROM images WHERE username = ?", [req.session.user], function (err, imagesCount) {
               if (err) throw err;
                 con.query("SELECT * FROM images WHERE username = ? AND profile_pic = 1", [req.session.user], function (err, profile_pic) {
                   if (err) throw err;
+                  con.query("SELECT * FROM `images` WHERE `username` = ?", [req.session.user], function (err, images, fields) {
+                    if (err) throw err;
+                    con.query("SELECT * FROM `interests` WHERE `username` = ?", req.session.user, function(err, interests, fields){
+                      if (err) throw err;
 
               if(result.length){
                 var gender = result[0].gender;
@@ -123,23 +134,22 @@ router.get("/", function (req, res) {
                 var age =  result[0].age;
   
               if(gender == null || pref_gender == null || bio == null || age == null){
-                  console.log("Gender, prefered Gender, age or bio is missing please fill in all values");
                   var checkProfile = 0;
                 }
                 else
                   checkProfile = 1;
               }
 
-              if(interests.length){
-                if(interests[0].total < 1){
+              if(interestsCount.length){
+                if(interestsCount[0].total < 1){
                  console.log("You need to add atleast one interest");
                  var checkInterest = 0;
                 }else
                 checkInterest = 1;
               }
 
-            if(images.length){
-              if(images[0].total < 1){
+            if(imagesCount.length){
+              if(imagesCount[0].total < 1){
                 console.log("You need to add atleast one image");
                 var checkImages = 0;
               }else
@@ -150,26 +160,28 @@ router.get("/", function (req, res) {
               console.log("You need to add a profile image");
               var checkprofilePic = 0;
             }else
-            checkprofilePic = 1;
+              checkprofilePic = 1;
+
+            if(!checkProfile || !checkprofilePic || !checkInterest || !checkImages){
+                res.redirect("/setProfile")
+            }else{
+              con.query("UPDATE user SET setup = '1' WHERE username = ?", req.session.user, function (err, result) {
+                if (err) {
+                  console.log(err);
+                  res.redirect("/setProfile");
+                } else { 
+                  console.log("profile uploaded succesfully");
+                  req.session.profile = "done";
+                  res.redirect("/");
+                }
+              })
+            }
               
-              if(!checkProfile || !checkInterest || !checkImages || !checkprofilePic){
-                console.log("fields have not been completed");
-                res.redirect("/setProfile");
-              }else{
-                con.query("UPDATE user SET setup = '1' WHERE username = ?", req.session.user, function (err, result) {
-                  if (err) {
-                    console.log(err);
-                    res.redirect("/setProfile");
-                  } else { 
-                    console.log("profile uploaded succesfully");
-                    req.session.profile = "done";
-                    res.redirect("/");
-                  }
-                })
-              }
             })
-            })
+          })
+        })
       })
+    })
   })
 })
 
@@ -200,7 +212,6 @@ router.get("/", function (req, res) {
         res.redirect("/setProfile");
       }
     })
-    
   });
 
   router.post('/delete',urlencodedParser, function (req, res) {
