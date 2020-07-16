@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="getLocation()">Turn on Location</button><br>
+    <form method="POST">
+        <input name="lat" id="lat" type="text"><br>
+        <input name="lng" id="lng" type="text"><br>
+        <button type="submit">Update location</button>
+    </form>
+
+    <br>
+
+    <form action="/user_profile/bio">
+        <textarea name="" id="" cols="30" rows="4"></textarea><br>
+        <button>Update bio</button>
+    </form>
+
+    <br>
+
+    <form action="/user_profile/interests">
+        <input type="text"><br>
+        <button>Update interests</button>
+    </form>
+</body>
+</html>
+<script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function showPosition(position) {
+        const lat = document.querySelector('#lat')
+        const lng = document.querySelector('#lng')
+        lat.value = position.coords.latitude
+        lng.value = position.coords.longitude
+    }
+
+</script>
