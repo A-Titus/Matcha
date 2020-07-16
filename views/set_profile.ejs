@@ -102,9 +102,19 @@
     <hr />
     <label for="age">Age</label>
     <input type="number" id="age" name="age" min="18" max="70" required>
-
+    
     <hr />
       <br />
+        <div class="getLocation">
+          <label for="location">Allow Matcha to access your location?</label> <br />
+          <button onclick="getLocation()">Get location</button>
+          <form action="/location" method="POST">
+            <input type="hidden" name="lat" id="lat">
+            <input type="hidden" name="lng" id="lng">
+          </form>
+        </div>
+      <br />
+      <hr />
     
       <div class="form-group">
         <label for="bio">Bio:</label>
@@ -167,3 +177,19 @@
     
   </body>
 </html>
+<script>
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+  }
+
+  function showPosition(position) {
+        const lat = document.querySelector('#lat');
+        const lng = document.querySelector('#lng');
+        lat.value = position.coords.latitude;
+        lng.value = position.coords.longitude;
+    }
+</script>

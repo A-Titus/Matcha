@@ -14,6 +14,7 @@ var setProfile = require('./src/set_profile');
 var upload = require('./src/upload');
 var profile = require('./src/profile');
 var updateProfile = require('./src/update_profile');
+var location = require('./src/location');
 
 // app.get("*", function (req, res) {
 //   res.render("error");
@@ -32,6 +33,7 @@ app.use('/setProfile', setProfile);
 app.use('/uploads', upload); 
 app.use('/profile', profile); 
 app.use('/updateProfile', updateProfile); 
+app.use('./location', location);
 
 app.get("/", function (req, res) {
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
