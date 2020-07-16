@@ -18,6 +18,78 @@ con.connect(function (err) {
   }
 });
 
+con.getConnection((error, connect) => 
+{ 
+            function generateUsers() {
+                let users = []
+                for (let id=1; id <= 500; id++) {
+                  let avatar = faker.image.avatar();
+                  let firstName = faker.name.firstName();
+                  let lastName = faker.name.lastName();
+                  let email = faker.internet.email();
+                  let word = faker.name.word(50);
+                  con.getConnection((error, connect) => 
+{ 
+            function generateUsers() {
+                let users = []
+                for (let id=1; id <= 500; id++) {
+                  let avatar = faker.image.avatar();
+                  let firstName = faker.name.firstName();
+                  let lastName = faker.name.lastName();
+                  let email = faker.internet.email();
+                  let word = faker.name.word(50);
+                  let password = faker.internet.password(50);
+                  sql = "INSERT INTO faker_users (image, name, surname, username, email, password) VALUES (?, ?, ?, ?, ?)";
+                  connect.query(sql, [avatar, firstName, lastName, word, words, password],function (err, result) {
+                    if (err) throw err;
+                    console.log(result);
+                    
+                    
+                   res.send(result)
+                  users.push({
+                     //"id": id,
+                      "image": avatar,
+                      "name": firstName,
+                      "surname": lastName,
+                      "username": word,
+                      "email": email,
+                      "password": password
+                  });
+                  console.log('100 records inserted!');
+                })
+              
+                //return { "data": users }
+                }
+       
+            }
+             generateUsers();
+});
+                  sql = "INSERT INTO faker_users (image, name, surname, username, email) VALUES (?, ?, ?, ?, ?)";
+                  connect.query(sql, [avatar, firstName, lastName, word, words],function (err, result) {
+                    if (err) throw err;
+                    console.log(result);
+                    
+                    
+                   res.send(result)
+                  users.push({
+                     //"id": id,
+                      "image": avatar,
+                      "name": firstName,
+                      "surname": lastName,
+                      "username": word,
+                      "email": email,
+
+                  });
+                  console.log('100 records inserted!');
+                })
+              
+                //return { "data": users }
+                }
+       
+            }
+             generateUsers();
+});
+
 router.get("/", function (req, res) {
   res.render("registration", {msg: null});
 });
