@@ -136,6 +136,9 @@ body, html{
     /* transform: translate(-30%, 120%); */
     border-radius: 50%;  
 }
+.checked {
+    color: orange;
+  }
 
 .profilePic {
     width: 35%;

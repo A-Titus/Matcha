@@ -4,6 +4,7 @@
 <head>
   <meta content="width=device-width, initial-scale=1" name="viewport" />
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <link rel="stylesheet" href="../style.css" />
 
@@ -113,6 +114,22 @@
           var show_w = document.getElementById(value)
           show_w.style.display = "none";
         }
+
+        function disable_button(value)
+        {
+          if (value)
+          {
+              document.getElementById('Like_button').disabled = true;
+          }
+          $("#5").load('ajax/search_user.esj')
+        }
+        function star(value,value2)
+        {
+          var percent = Math.round((parseInt(value)/parseInt(value2)) * 5);     
+            for (k=1;k<= percent; k++)
+           {document.getElementById(k).className ="fa fa-star checked"} ;
+
+        }
       </script>
 
 <% if (!data.x[0]) { %>
@@ -124,14 +141,23 @@
               <a href="<%= data.table_images[0].image_path %>"><img width=100px height="100px"
                 src="<%= data.table_images[0].image_path %>"></a>
               </div>
+              <br>
+              <span style= "font-size: 120%;"class="heading">User Rating</span>
+              <span id ="1" class="fa fa-star"></span>
+              <span id = "2" class="fa fa-star"></span>
+              <span id = "3" class="fa fa-star"></span>
+              <span id = "4" class="fa fa-star"></span>
+              <span id = "5" class="fa fa-star"></span><span> (<%= data.likes %> out of <%= data.count_value %> total users rated )</span>
+              <script>star('<%= data.likes %>','<%= data.count_value %>')</script>
             <h1> Name:<%= data.x[0].username%> </h1>
             <h1> Age:<%= data.x[0].age%> </h1>
+            <h1>Present : <%= data.disable_likes %> </h1>
             <h1> Bio:<%= data.x[0].bio%> </h1>
             <h1> Popularity rating </h1>
-            <h1> Last seen:<%= data.x[0].last_seen%> </h1>
+            <h1> Last seen:<%= data.x[0].last_seen%> </h1> 
             <button name="connect_click"
             onclick="Ask_connect('find1'),display_user('<%= data.x[0].username%>',null)">Connect</button>
-            <button onclick="Ask_connect('find3'),display_user('<%= data.x[0].username%>','find3')"">Like</button>
+            <button id= "Like_button" onclick="Ask_connect('find3'),display_user('<%= data.x[0].username%>','find3'),disable_button('<%= data.disable_likes %>')">Like</button>
             <button onclick=" Ask_connect('find4'),display_user('<%= data.x[0].username%>','find4')">Report</button>
             <button>Block</button><br>
             Comment area<textarea></textarea>
