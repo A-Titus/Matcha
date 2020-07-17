@@ -26,7 +26,7 @@ con.connect(function (err) {
         let lastName = faker.name.lastName();
         let email = faker.internet.email();
         let username = firstName;
-        let password = faker.internet.password(9);
+        let password = "$2b$15$O92B0OfLYZhq1UAotcmHdejQv2mUJYbd/sH.1839PCNfmDH5ZQMQ6" //Pass1234@
         let verifkey = faker.random.number({
           'min': 1000,
           'max': 5000
@@ -41,24 +41,38 @@ con.connect(function (err) {
           'min': 18,
           'max': 70
         });
-        let bio = faker.random.words(15);
-        //let hashed_pass = bcrypt.hashSync(password, 15);
+        let interests = [ 'Fitness' , 'loving', 'caring', 'sweet', 'cars', 'movies', 'sunsets' ,'art', 'photography', 'fashion', 'coding' ];
+        let tags = faker.random.arrayElement(interests);
+        let bio = faker.lorem.text();
+        let latitude =  Math.random() * (49.026657 - 48.736129) + 48.736129; // generate -90 90
+        let longitude = Math.random() * (2.549672 - 2.10954) + 2.10954; // generate -180 180 48.882072
+        let pic = faker.image.avatar();
 
         sql = "INSERT INTO user (name, surname, username, email, password, verifkey, verified, setup) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         con.query(sql, [firstName, lastName, username, email, password, verifkey, verified, setup],function (err, result) {
           if (err) throw err;
         });
 
-        sql = "INSERT INTO user_profile (gender, pref_gender, bio, age, username) VALUES (?, ?, ?, ?, ?)";
-        con.query(sql, [gender, pref_gender, bio, age, username],function (err, result) {
+        sql = "INSERT INTO user_profile (gender, pref_gender, bio, age, username, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        con.query(sql, [gender, pref_gender, bio, age, username, latitude, longitude],function (err, result) {
+          if (err) throw err;
+        });
+
+        sql = "INSERT INTO images (image_path, username, profile_pic) VALUES (?, ?, ?)";
+        con.query(sql, [pic, username, "1"],function (err, result) {
+          if (err) throw err;
+        });
+
+        sql = "INSERT INTO interests (interests, username) VALUES (?, ?)";
+        con.query(sql, [tags, username],function (err, result) {
           if (err) throw err;
         });
       }
 
   }
-    generateUsers();
-    console.log('500 records inserted!');
-    console.log('faker commented out for now');
+    // generateUsers();
+    // console.log('500 records inserted!');
+    // console.log('faker commented out for now');
 
 router.get("/", function (req, res) {
   res.render("registration", {msg: null});

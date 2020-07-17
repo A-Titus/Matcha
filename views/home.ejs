@@ -24,6 +24,19 @@
         <li><a href="/updateProfile">Update Profile</a></li>
         <li><a href="/chat">Chat</a></li>
       </ul>
+
+      <div class="dropdown">
+        <button class="dropbtn">Filter</button>
+        <div class="dropdown-content">
+        <a><button onclick="myage()">Age 18-25</button></a>
+        <a><button onclick="age26()">Age 26-30</button></a>
+        <a><button onclick="age31()">Age 31-40</button></a>
+        <a><button onclick="age41()">Age 41-50</button></a>
+        <a><button onclick="age51()">Age 51-65</button></a>
+        <a><button onclick="interests()">interests</button></a>
+        </div>
+      </div>
+
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/profile"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
         <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
@@ -32,6 +45,88 @@
   </nav>
   <div>
       <h1>this is the main page</h1>
+      <p id="table" style="color: aliceblue;"></P>
+        <p id="table1" style="color: aliceblue;"></P>
+        <p id="table2" style="color: aliceblue;"></P>
+        <p id="table3" style="color: aliceblue;"></P>
+        <p id="table4" style="color: aliceblue;"></P>
+        <p id="table5" style="color: aliceblue;"></P>
   </div>
+
+  <script text="text/javascript">
+    function myage(){
+        var xhttp;
+        xhttp = new XMLHttpRequest()
+        xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+         document.getElementById("table").innerHTML = this.responseText;
+        //  console.log(data);
+         }
+        };
+        xhttp.open('GET', '/agegap', true);
+        xhttp.send();
+        }  
+        function interests(){
+        var xhttp;
+        xhttp = new XMLHttpRequest()
+        xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+         document.getElementById("table1").innerHTML = this.responseText;
+        //  console.log(data);
+         }
+        };
+        xhttp.open('GET', '/interest', true);
+        xhttp.send();
+        }  
+        function age26(){
+        var xhttp;
+        xhttp = new XMLHttpRequest()
+        xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+         document.getElementById("table2").innerHTML = this.responseText;
+        //  console.log(data);
+         }
+        };
+        xhttp.open('GET', '/age2630', true);
+        xhttp.send();
+        } 
+        function age31(){
+        var xhttp;
+        xhttp = new XMLHttpRequest()
+        xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+         document.getElementById("table3").innerHTML = this.responseText;
+        //  console.log(data);
+         }
+        };
+        xhttp.open('GET', '/age31', true);
+        xhttp.send();
+        } 
+        
+        function age41(){
+        var xhttp;
+        xhttp = new XMLHttpRequest()
+        xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+         document.getElementById("table4").innerHTML = this.responseText;
+        //  console.log(data);
+         }
+        };
+        xhttp.open('GET', '/age41', true);
+        xhttp.send();
+        }  
+        function age51(){
+        var xhttp;
+        xhttp = new XMLHttpRequest()
+        xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+         document.getElementById("table5").innerHTML = this.responseText;
+        //  console.log(data);
+         }
+        };
+        xhttp.open('GET', '/age51', true);
+        xhttp.send();
+        }  
+  </script>
 </body>
 </html>

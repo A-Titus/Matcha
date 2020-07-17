@@ -1,12 +1,11 @@
 
-<script src="js/socket.io.js"></script>
-
+  <script src="js/socket.io.js"></script>
 <html>
 <head>
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet"/>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet"/>
 
 <script>
   var server = "http://localhost:3000";
@@ -45,7 +44,7 @@
 
     var html = "";
     html += '<div class="incoming_msg">';
-      html += '<div class="incoming_msg_img"> <img src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes.png" alt="sunil"> </div>';
+      html += '<div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>';
       html += '<div class="received_msg">';
         html += '<div class="received_withd_msg">';
           html += '<p>' + data.message + '</p>';
@@ -88,7 +87,7 @@
               html += '</div>';
             } else {
               html += '<div class="incoming_msg">';
-                html += '<div class="incoming_msg_img"> <img src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes.png" alt="sunil"> </div>';
+                html += '<div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>';
                 html += '<div class="received_msg">';
                   html += '<div class="received_withd_msg">';
                     html += '<p>' + messages[a].message + '</p>';
