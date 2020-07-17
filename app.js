@@ -1,10 +1,11 @@
 var express = require("express");
 var session = require("express-session");
 var bodyParser = require('body-parser');
-var io = require("socket.io");
+//var io = require("socket.io");
 var app = express();
 
-
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
 app.set("view engine", "ejs");
 
@@ -18,6 +19,8 @@ var profile = require('./src/profile');
 var updateProfile = require('./src/update_profile');
 var confirm = require('./src/confirm');
 var resetPassword = require('./src/reset_password');
+var location = require('./src/location');
+//var chat = require('./src/chat');
 
 // app.get("*", function (req, res) {
 //   res.render("error");
@@ -38,6 +41,8 @@ app.use('/profile', profile);
 app.use('/updateProfile', updateProfile); 
 app.use('/confirm', confirm); 
 app.use('/resetPassword', resetPassword);
+app.use('/location', location);
+//app.use('/chat', chat);
 
 app.get("/", function (req, res) {
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');

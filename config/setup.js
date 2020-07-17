@@ -40,13 +40,13 @@ function database() {
       console.log("image Table created");
     });
 
-    var sql = "CREATE TABLE IF NOT EXISTS user_profile (id int AUTO_INCREMENT PRIMARY KEY, gender varchar(255) , pref_gender varchar(255) , bio varchar(255), age int(11), username varchar(255))";
+    var sql = "CREATE TABLE IF NOT EXISTS user_profile (id int AUTO_INCREMENT PRIMARY KEY, gender varchar(255) , pref_gender varchar(255) , bio varchar(255), age int(11), username varchar(255), latitude decimal(20, 10), longitude decimal(20, 10))";
       con.query(sql, function (err, result) {
         if (err) throw err;
         console.log("user_profile Table created");
       });
 
-      var sql = "CREATE TABLE IF NOT EXIST messages (id int AUTO_INCREMENT PRIMARY KEY , sender TEXT NOT NULL , receiver TEXT NOT NULL , message TEXT NOT NULL)";
+      var sql = "CREATE TABLE IF NOT EXISTS messages (id int AUTO_INCREMENT PRIMARY KEY , sender TEXT NOT NULL , receiver TEXT NOT NULL , message TEXT NOT NULL)";
       con.query(sql, function (err, result) {
         if (err) throw err;
         console.log("message Table created");

@@ -2,6 +2,7 @@ var express = require("express");
 var mysql = require("mysql");
 var bodyParser = require("body-parser");
 var nodemailer = require('nodemailer');
+var faker = require('faker');
 
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -18,77 +19,46 @@ con.connect(function (err) {
   }
 });
 
-con.getConnection((error, connect) => 
-{ 
-            function generateUsers() {
-                let users = []
-                for (let id=1; id <= 500; id++) {
-                  let avatar = faker.image.avatar();
-                  let firstName = faker.name.firstName();
-                  let lastName = faker.name.lastName();
-                  let email = faker.internet.email();
-                  let word = faker.name.word(50);
-                  con.getConnection((error, connect) => 
-{ 
-            function generateUsers() {
-                let users = []
-                for (let id=1; id <= 500; id++) {
-                  let avatar = faker.image.avatar();
-                  let firstName = faker.name.firstName();
-                  let lastName = faker.name.lastName();
-                  let email = faker.internet.email();
-                  let word = faker.name.word(50);
-                  let password = faker.internet.password(50);
-                  sql = "INSERT INTO faker_users (image, name, surname, username, email, password) VALUES (?, ?, ?, ?, ?)";
-                  connect.query(sql, [avatar, firstName, lastName, word, words, password],function (err, result) {
-                    if (err) throw err;
-                    console.log(result);
-                    
-                    
-                   res.send(result)
-                  users.push({
-                     //"id": id,
-                      "image": avatar,
-                      "name": firstName,
-                      "surname": lastName,
-                      "username": word,
-                      "email": email,
-                      "password": password
-                  });
-                  console.log('100 records inserted!');
-                })
-              
-                //return { "data": users }
-                }
-       
-            }
-             generateUsers();
-});
-                  sql = "INSERT INTO faker_users (image, name, surname, username, email) VALUES (?, ?, ?, ?, ?)";
-                  connect.query(sql, [avatar, firstName, lastName, word, words],function (err, result) {
-                    if (err) throw err;
-                    console.log(result);
-                    
-                    
-                   res.send(result)
-                  users.push({
-                     //"id": id,
-                      "image": avatar,
-                      "name": firstName,
-                      "surname": lastName,
-                      "username": word,
-                      "email": email,
+  function generateUsers() {
+      let users = []
+      for (let id=1; id <= 500; id++) {
+        let firstName = faker.name.firstName();
+        let lastName = faker.name.lastName();
+        let email = faker.internet.email();
+        let username = firstName;
+        let password = faker.internet.password(9);
+        let verifkey = faker.random.number({
+          'min': 1000,
+          'max': 5000
+        });
+        let verified = 1;
+        let setup = 1;
 
-                  });
-                  console.log('100 records inserted!');
-                })
-              
-                //return { "data": users }
-                }
-       
-            }
-             generateUsers();
-});
+        let genders = [ 'female' , 'male', 'bisexual' ];
+        let gender = faker.random.arrayElement(genders);
+        let pref_gender = faker.random.arrayElement(genders);
+        let age = faker.random.number({
+          'min': 18,
+          'max': 70
+        });
+        let bio = faker.random.words(15);
+        //let hashed_pass = bcrypt.hashSync(password, 15);
+
+        sql = "INSERT INTO user (name, surname, username, email, password, verifkey, verified, setup) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        con.query(sql, [firstName, lastName, username, email, password, verifkey, verified, setup],function (err, result) {
+          if (err) throw err;
+        });
+
+        sql = "INSERT INTO user_profile (gender, pref_gender, bio, age, username) VALUES (?, ?, ?, ?, ?)";
+        con.query(sql, [gender, pref_gender, bio, age, username],function (err, result) {
+          if (err) throw err;
+        });
+      }
+
+  }
+    generateUsers();
+    console.log('500 records inserted!');
+    console.log('faker commented out for now');
 
 router.get("/", function (req, res) {
   res.render("registration", {msg: null});
@@ -161,6 +131,8 @@ router.post("/", urlencodedParser, function (req, res) {
         bio: null,
         age: null,
         username: username,
+        latitude: null,
+        longitude: null,
       };
 
 

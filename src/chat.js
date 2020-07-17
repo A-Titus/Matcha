@@ -36,7 +36,7 @@ app.post("/get_messages", function (request, result) {
 });
 
 app.get("/", function (req, res) {
-	result.end("Hello world !");
+	res.end("Hello world !");
 });
 
 var users = [];
