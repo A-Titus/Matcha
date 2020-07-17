@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link
       rel="stylesheet"
       href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
@@ -22,7 +22,7 @@
           <ul class="nav navbar-nav">
             <li ><a href="/">Home</a></li>
             <li><a href="/updateProfile">Update Profile</a></li>
-            <li><a href="#">Page 2</a></li>
+            <li><a href="/chat">Chat</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="active"><a href="/profile"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
@@ -32,10 +32,49 @@
       </nav>
   
   <div class="profile">
+      <div class="userInfoTags">
+      <label>Interests</label>
+      <br/>
+    <% if (tags != null){
+        if (tags !== []) {
+          for (var j = 0; j < tags.length; j++) { %>
+            <div class="tagBlocks">
+             <p><%=tags[j].interests%></p>
+          </div>
+          <%   }} 
+     } %>
+      </div>
 
+      <div class="bio">
+      <label>Bio</label>
+      <br/>
+      <p><%=bio%></p>
+      </div>
+      <div class="userImgdisplay">
+        <% if (photos != null){
+        if (photos !== []) {
+          for (var j = 0; j < photos.length; j++) { %>
+              <img src="<%=photos[j].image_path%>" class="userInfoImgdisplay" id="<%=photos[j].img_id%>" alt="..." width="50" height="50">
+          <%   }} 
+     } %>
+      </div>
   </div>
   <div class="profile1">
-      
+    <% if (profile_picture != null){ %>
+        <label for="profilePic">Profile Picture</label>
+        <br/>
+        <img class="profilePic" src="<%=profile_picture%>" alt="...">
+      <% } %>
+
+    <div class="userInfo1">
+    <p>name: <%=name%></p>
+    <p>surname: <%=surname%></p>
+    <p>email: <%=email%></p>
+    <p>username: <%=username%></p>
+    <p>age: <%=age%></p>
+    <p>gender: <%=gender%></p>
+    <p>prefered gender: <%=pref_gender%></p>
+    </div>
 </div>
 </body>
 </html>

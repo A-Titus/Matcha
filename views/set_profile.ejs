@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link
       rel="stylesheet"
       href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
@@ -17,17 +17,24 @@
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="/">Matcha</a>
+          <a class="navbar-brand">Matcha</a>
         </div>
+        <ul class="nav navbar-nav">
+          <li><a href="#"> Search</a></li>
+        </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
         </ul>
       </div>
     </nav>
 
-    <form action="/setProfile/complete" method="POST">
-    <button type="submit" name="profile complete">Profile Complete</button>
-</form>
+  <div class="errorMsg">
+    <p><%=msg%></p>
+  </div>
+
+  <div class="errorMsg">
+    <p><%=errMsg%></p>
+  </div>
 
 <div class="setProfilePic">
   <form action="/setProfile/profilePic" method="POST">
@@ -36,14 +43,11 @@
       <label for="profilePic">Profile Picture</label>
       <br/>
       <img class="profilePic" src="<%=profile_picture%>" alt="...">
-      <br/><br/><br/><br/><br/><br/><br/><br/><br/>
-      <p>Please upload an image using the upload form first</p>
-      
-     
       
     <% } %>
      
   <div class="images">
+    <p>Please upload an image using the upload form first</p>
     <% if (photos != null){
       if (photos !== []) {
         for (var j = 0; j < photos.length; j++) { %>
@@ -52,10 +56,12 @@
              name="profilePic" value="<%=photos[j].img_id%>">
         <%   }} 
    } %>
+  
   </div>
     
       <div class="profileButton"> 
         <button type="submit" class="btn btn-danger btn-block my-4">Set profile pic</button>
+        
       </div>
     </form>
     </div>
@@ -63,10 +69,7 @@
 
     <div class="setProfile">
       <form
-      class="text-center border border-light p-4"
-        action="/setProfile"
-        method="POST"
-      >
+      class="text-center border border-light p-4" action="/setProfile" method="POST">
       <label for="bio">Gender:</label>
       <br />
     <input type="radio" id="male"
@@ -74,7 +77,7 @@
     <label for="male">Male</label>
 
     <input type="radio" id="female"
-     name="gender" value="female required">
+     name="gender" value="female" required>
     <label for="female">Female</label>
 
     <input type="radio" id="bisexual"
@@ -120,6 +123,7 @@
         <label for="bio">Bio:</label>
         <textarea class="form-control" rows="5" id="bio" name="bio" required></textarea>
       </div>
+
       <br /><br /><br />
       <div class="submitButton">
         <button type="submit" class="btn btn-danger btn-block my-4">
@@ -128,13 +132,29 @@
       </div>
       </form>
     </div>
+    <hr />
+    <br />
 
+    <div class="getLocation">
+      <label for="location">Allow Matcha to access your location?</label> <br />
+      <br />
+      <button onclick="getLocation()">Get location</button>
+      <form action="/location" method="POST">
+        <input type="hidden" name="lat" id="lat" required>
+        <input type="hidden" name="lng" id="lng" required>
+
+        <br /><br />
+        <button type="submit" class="btn btn-danger btn-block my-4">
+          Submit
+        </button>
+      </form>
+    </div>
       <hr />
       <br />
       <div class="setProfile4">
         <form action="/setProfile/interests" method="POST"> 
           <label for="interests">Interests</label>
-          <input type="text" name="interests" id="interests" class="form-control mb-3"/>
+          <input type="text" name="interests" id="interests" class="form-control mb-3" required/>
           <br/>
           <div class="submitButton">
             <button type="submit" class="btn btn-danger btn-block my-4">
@@ -142,6 +162,21 @@
             </button>
           </div>  
         </form>
+        <div class="displayTags">
+          <% if (tags != null){
+            if (tags !== []) {
+              for (var j = 0; j < tags.length; j++) { %>
+                <div class="tagBlocks">
+                 <p><%=tags[j].interests%></p>
+                  <form action="/setProfile/deleteInterest" method="POST">
+                      <button name="deleteTag" value="<%=tags[j].id%>" type="submit">x</button>
+                  </form>
+              </div>
+              <%   }} 
+         } %>
+         
+        </div>
+
       </div>
       
       <hr />
@@ -173,10 +208,19 @@
               <%   }} 
          } %>
       </div> 
-      </div>
-    
+    </div>
   </body>
+  
+  <div class="completeProfile">
+    <form action="/setProfile/complete" method="POST">
+      <button type="submit" name="profile complete" class="btn btn-success btn-block my-4">Profile Complete</button>
+    </form>
+  </div>
 </html>
+<<<<<<< HEAD
+=======
+
+>>>>>>> c2be5ca1a09b5c1177300ffc574d1a8b86c25fa7
 <script>
   function getLocation() {
     if (navigator.geolocation) {
@@ -185,7 +229,10 @@
       x.innerHTML = "Geolocation is not supported by this browser.";
     }
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> c2be5ca1a09b5c1177300ffc574d1a8b86c25fa7
   function showPosition(position) {
         const lat = document.querySelector('#lat');
         const lng = document.querySelector('#lng');
