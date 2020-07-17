@@ -141,6 +141,16 @@ router.get("/", function (req, res) {
                 }
                 else
                   checkProfile = 1;
+
+                  if(!result[0].latitude || !result[0].longitude){
+                    console.log("You need to add your location");
+                    req.session.Msg = "You need to add your location";
+                    var checklocation = 0;
+                  }else{
+                    checklocation = 1;
+                    req.session.Msg = null;
+                  }
+    
               }
 
               if(interestsCount.length){
@@ -165,7 +175,8 @@ router.get("/", function (req, res) {
             }else
               checkprofilePic = 1;
 
-            if(!checkProfile || !checkprofilePic || !checkInterest || !checkImages){
+              
+            if(!checkProfile || !checkprofilePic || !checkInterest || !checkImages || !checklocation){
                 res.redirect("/setProfile")
             }else{
               con.query("UPDATE user SET setup = '1' WHERE username = ?", req.session.user, function (err, result) {

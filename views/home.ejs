@@ -22,9 +22,10 @@
       <ul class="nav navbar-nav">
         <li class="active"><a href="/">Home</a></li>
         <li><a href="/updateProfile">Update Profile</a></li>
-        <li><a href="#">Page 2</a></li>
-        <li></li>
+        <li><a href="/search_user">Search users</a></li>
+        <li><a href="/chat">Chat</a></li>
       </ul>
+
       <div class="dropdown">
         <button class="dropbtn">Filter</button>
         <div class="dropdown-content">
@@ -36,6 +37,7 @@
         <a><button onclick="interests()">interests</button></a>
         </div>
       </div>
+
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/profile"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
         <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
@@ -44,16 +46,23 @@
   </nav>
   <div>
       <h1>this is the main page</h1>
-      <!-- <      > -->
-      <!-- <      > -->
-      <p id="table" style="color: aliceblue;"></P>
+      <!-- <% if (userData != null){
+        if (userData !== []) {
+          for (var j = 0; j < userData.length; j++) { %>
+            <div class="displayUsers">
+             <p><%=userData[j].username%></p>
+          </div>
+          <%   }} 
+     } %>   -->
+
+     <p id="table" style="color: aliceblue;"></P>
       <p id="table1" style="color: aliceblue;"></P>
       <p id="table2" style="color: aliceblue;"></P>
       <p id="table3" style="color: aliceblue;"></P>
       <p id="table4" style="color: aliceblue;"></P>
       <p id="table5" style="color: aliceblue;"></P>
-     
   </div>
+
   <script text="text/javascript">
     function myage(){
         var xhttp;
@@ -67,7 +76,6 @@
         xhttp.open('GET', '/agegap', true);
         xhttp.send();
         }  
-
         function interests(){
         var xhttp;
         xhttp = new XMLHttpRequest()
@@ -80,7 +88,6 @@
         xhttp.open('GET', '/interest', true);
         xhttp.send();
         }  
-
         function age26(){
         var xhttp;
         xhttp = new XMLHttpRequest()
@@ -93,7 +100,6 @@
         xhttp.open('GET', '/age2630', true);
         xhttp.send();
         } 
-
         function age31(){
         var xhttp;
         xhttp = new XMLHttpRequest()
@@ -119,7 +125,6 @@
         xhttp.open('GET', '/age41', true);
         xhttp.send();
         }  
-
         function age51(){
         var xhttp;
         xhttp = new XMLHttpRequest()
@@ -132,7 +137,6 @@
         xhttp.open('GET', '/age51', true);
         xhttp.send();
         }  
-
   </script>
 </body>
 </html>

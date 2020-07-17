@@ -113,6 +113,7 @@
         <label for="bio">Bio:</label>
         <textarea class="form-control" rows="5" id="bio" name="bio" required></textarea>
       </div>
+
       <br /><br /><br />
       <div class="submitButton">
         <button type="submit" class="btn btn-danger btn-block my-4">
@@ -121,19 +122,29 @@
       </div>
       </form>
     </div>
+    <hr />
+    <br />
 
+    <div class="getLocation">
+      <label for="location">Allow Matcha to access your location?</label> <br />
+      <br />
+      <button onclick="getLocation()">Get location</button>
+      <form action="/location" method="POST">
+        <input type="hidden" name="lat" id="lat" required>
+        <input type="hidden" name="lng" id="lng" required>
+
+        <br /><br />
+        <button type="submit" class="btn btn-danger btn-block my-4">
+          Submit
+        </button>
+      </form>
+    </div>
       <hr />
       <br />
       <div class="setProfile4">
         <form action="/setProfile/interests" method="POST"> 
           <label for="interests">Interests</label>
           <input type="text" name="interests" id="interests" class="form-control mb-3" required/>
-          <input type="checkbox" id="intrest1" name="vehicle1" value="Bike">
-          <label for="intrest1">sports</label><br>
-          <input type="checkbox" id="intrest2" name="vehicle2" value="Car">
-          <label for="intrest2">Gym</label><br>
-          <input type="checkbox" id="intrest3" name="vehicle3" value="Boat">
-          <label for="intrest3">feshion</label><br><br>
           <br/>
           <div class="submitButton">
             <button type="submit" class="btn btn-danger btn-block my-4">
@@ -196,3 +207,19 @@
     </form>
   </div>
 </html>
+
+<script>
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+  }
+  function showPosition(position) {
+        const lat = document.querySelector('#lat');
+        const lng = document.querySelector('#lng');
+        lat.value = position.coords.latitude;
+        lng.value = position.coords.longitude;
+    }
+</script>

@@ -23,7 +23,7 @@
           <ul class="nav navbar-nav">
             <li><a href="/">Home</a></li>
             <li class="active"><a href="/updateProfile">Update Profile</a></li>
-            <li><a href="#">Page 2</a></li>
+            <li><a href="/chat">Chat</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="/profile"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
@@ -177,6 +177,22 @@
 
       <hr />
       <br />
+      <div class="updateLocation">
+        <label for="location">Allow Matcha to access your location?</label> <br />
+        <br />
+        <button onclick="getLocation()">Update location</button>
+        <form action="/location" method="POST">
+          <input type="hidden" name="lat" id="lat" required>
+          <input type="hidden" name="lng" id="lng" required>
+  
+          <br /><br />
+          <button type="submit" class="btn btn-danger btn-block my-4">
+            Update
+          </button>
+        </form>
+      </div>
+      <hr />
+      <br />
       
       <div class="updateProfile4">
         <form action="/updateProfile/interests" method="POST"> 
@@ -240,3 +256,19 @@
     
   </body>
 </html>
+
+<script>
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+  }
+  function showPosition(position) {
+        const lat = document.querySelector('#lat');
+        const lng = document.querySelector('#lng');
+        lat.value = position.coords.latitude;
+        lng.value = position.coords.longitude;
+    }
+</script>
