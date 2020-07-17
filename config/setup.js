@@ -39,10 +39,10 @@ function database() {
       console.log("image Table created");
     });
     
-    var sql = "CREATE TABLE IF NOT EXISTS user_profile (id int AUTO_INCREMENT PRIMARY KEY, gender varchar(255) , pref_gender varchar(255) , bio varchar(255), age int(11), username varchar(255), last_seen varchar(255),connect_user varchar(255))";
+    var sql = "CREATE TABLE IF NOT EXISTS user_profile (id int AUTO_INCREMENT PRIMARY KEY, gender varchar(255) , pref_gender varchar(255) , bio varchar(255), age int(11), username varchar(255), last_seen varchar(255))";
       con.query(sql, function (err, result) {
         if (err) throw err;
-        console.log("user_profile Table created");
+        console.log("user_profile Table created");  
       });
 
       var sql = "CREATE TABLE IF NOT EXISTS user_invite (id int AUTO_INCREMENT PRIMARY KEY, username varchar(255) , requ_user varchar(255))";
@@ -51,6 +51,23 @@ function database() {
         console.log("user_invite Table created");
       });
 
+      var sql = "CREATE TABLE IF NOT EXISTS user_like (id int AUTO_INCREMENT PRIMARY KEY, username varchar(255) , requ_user varchar(255))";
+      con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("user_liked Table created");
+      });
+
+      var sql = "CREATE TABLE IF NOT EXISTS user_report (id int AUTO_INCREMENT PRIMARY KEY, username varchar(255) , requ_user varchar(255))";
+        con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("user_report Table created");
+        });
+      
+        var sql = "CREATE TABLE IF NOT EXISTS user_block (id int AUTO_INCREMENT PRIMARY KEY, username varchar(255) , requ_user varchar(255))";
+        con.query(sql, function (err, result) {
+          if (err) throw err;
+          console.log("user_block Table created");
+        });
 
   });
 

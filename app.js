@@ -24,6 +24,8 @@ var profile = require('./src/profile');
 var updateProfile = require('./src/update_profile');
 var search_user = require('./src/search_user');
 var connect = require('./src/connect');
+var likes = require('./src/likes');
+var report = require('./src/report');
 
 // app.get("*", function (req, res) {
 //   res.render("error");
@@ -44,6 +46,8 @@ app.use('/profile', profile);
 app.use('/updateProfile', updateProfile);
 app.use('/search_user', search_user);
 app.use('/connect',connect);
+app.use('/likes',likes);
+app.use('/report',report);
 
 app.get("/", function (req, res) {
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
@@ -60,7 +64,7 @@ app.get("/", function (req, res) {
   app.get("/logout", function (req, res) {
     console.log(req.session.user);
     var dateUser = new Date().toUTCString();
-    console.log(dateUser);
+    console.log("Logout time : " |+dateUser);
     con.query("UPDATE user_profile SET last_seen = (?) WHERE username = (?)", [dateUser,req.session.user]);
       req.session.destroy();
       res.redirect("/login");

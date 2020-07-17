@@ -35,25 +35,45 @@
       <h1>Pleaser enter user to search for</h1>
       name: <input type="text" id="user_search" name="search_user_match" />
       <button type="submit">Search</button>
-    </form>>
-
-    <!-- <form class="form" action="/connect" method="GET"> -->
-      <div id="find1" class="bg_modal">
-        <div class="modal-content">
-          <h1 id="con_display"></h1>
-          <button id="add_connect" onclick="test_page('find2')">Yes</button>
-          <button id="connect_no">No</button>
-        </div>
-      </div>
-    <!-- </form> -->
-    <form class="form2" action="/connect" method="GET"></form>
-      <div id="find2" class="bg_modal2">
-        <div id="success_user" class="modal-content">
-          <h1>A request to has been sent </h1>
-          <button onclick="sent_connect('find2','find1')">Okay</button>
-       </div>
-      </div>
     </form>
+
+    <div id="find1" class="bg_modal">
+      <div class="modal-content">
+        <h1 id="con_display"></h1>
+        <form class="Connect" action="/connect" method="GET">
+          <button id="add_connect" onclick="test_page('find2')">Yes</button>
+        </form>
+        <button id="connect_no" onclick="Click_no('find1')">No</button>
+      </div>
+    </div>
+
+    <div id="find2" class="bg_modal2">
+      <div id="success_user" class="modal-content">
+        <h1 id="message2"></h1>
+        <button onclick="sent_connect('find2','find1')">Okay</button>
+      </div>
+    </div>
+
+    <div id="find3" class="bg_modal">
+      <div class="modal-content">
+        <h1 id="message"></h1>
+        <form class="Likes" action="/likes" method="GET">
+          <button id="add_connect" onclick="likes('find2',null),Click_no('find3')">Yes</button>
+        </form>
+        <button id="connect_no" onclick="Click_no('find3')">No</button>
+      </div>
+    </div>
+
+    <div id="find4" class="bg_modal">
+      <div class="modal-content">
+        <h1 id="Report_message"></h1>
+        <form class="Report" action="/report" method="GET">
+          <button id="add_connect" onclick="likes('find2','find4'),Click_no('find4')">Yes</button>
+        </form>
+        <button id="connect_no" onclick="Click_no('find4')">No</button>
+      </div>
+    </div>
+
     <div class="display_items">
       <script>
         function Ask_connect(value) {
@@ -61,53 +81,71 @@
           show_w.style.display = "flex";
         }
         function test_page(value) {
-          $(value).load("/connect");
+          document.getElementById("message2").innerHTML = "A request to has been sent ";
           var show_w = document.getElementById(value)
           show_w.style.display = "flex";
-
         }
-        function display_user(value){
-          var user =value;
-          document.getElementById("con_display").innerHTML = "Would you like to send connect request to "+"["+value+"]"+"?";
-
-
-          
+        function display_user(value, value2) {
+          var user = value;
+          if (value2 == "find4") {
+            document.getElementById("Report_message").innerHTML = "Would you like to report" + "[" + value + "]" + "?";
+          }
+          else
+            if (value2 == "find3") {
+              document.getElementById("message").innerHTML = "Would you like to like this profile?";
+          }
+          document.getElementById("con_display").innerHTML = "Would you like to send connect request to " + "[" + value + "]" + "?";
         }
-        function sent_connect(value,value2) {
+        function sent_connect(value, value2) {
           var show_w = document.getElementById(value)
           var show_2 = document.getElementById(value2)
           show_w.style.display = "none";
           show_2.style.display = "none";
         }
+        function likes(value, value2) {
+          if (value2 == 'find4') { document.getElementById("message2").innerHTML = "You have reported this person"; }
+          else
+            document.getElementById("message2").innerHTML = "You liked this";
+          var show_w = document.getElementById(value)
+          show_w.style.display = "flex";
+        }
+        function Click_no(value) {
+          var show_w = document.getElementById(value)
+          show_w.style.display = "none";
+        }
       </script>
-      <% if (!data.x[0]) { %>
-      <h1> No users have been found! </h1>
-      <%}
-        else { %>
-      <h1> Name:<%= data.x[0].username%> </h1>
-      <h1> Age:<%= data.x[0].age%> </h1>
-      <h1> Bio:<%= data.x[0].bio%> </h1>
-      <h1> Popularity rating </h1>
-      <h1> Last seen:<%= data.x[0].last_seen%> </h1>
-      <button name="connect_click" onclick="Ask_connect('find1'),display_user('<%= data.x[0].username%>')">Connect</button>
-      <button onclick="yeah()">Like</button>
-      <button>Report</button>
-      <button>Block</button><br>
-      Comment area<textarea></textarea>
-      <%} %>
-      <% for(k in  data.table_images) { %>
-      <div class="big_image">
-        <div class="pic_1">
-          <a href="<%= data.table_images[k].image_path %>"><img width=200px height="200px"
-              src="<%= data.table_images[k].image_path %>"></a>
-        </div>
-      </div>
-      <% }%>
+
+<% if (!data.x[0]) { %>
+  <h1></h1>
+  <%}
+  else { %>
+        <div class="profile22">
+            <div class="circle_pic">
+              <a href="<%= data.table_images[0].image_path %>"><img width=100px height="100px"
+                src="<%= data.table_images[0].image_path %>"></a>
+              </div>
+            <h1> Name:<%= data.x[0].username%> </h1>
+            <h1> Age:<%= data.x[0].age%> </h1>
+            <h1> Bio:<%= data.x[0].bio%> </h1>
+            <h1> Popularity rating </h1>
+            <h1> Last seen:<%= data.x[0].last_seen%> </h1>
+            <button name="connect_click"
+            onclick="Ask_connect('find1'),display_user('<%= data.x[0].username%>',null)">Connect</button>
+            <button onclick="Ask_connect('find3'),display_user('<%= data.x[0].username%>','find3')"">Like</button>
+            <button onclick=" Ask_connect('find4'),display_user('<%= data.x[0].username%>','find4')">Report</button>
+            <button>Block</button><br>
+            Comment area<textarea></textarea>
+            <% for(k in  data.table_images) { %>
+              <div class="big_image">
+                <div class="pic_1">
+                  <a href="<%= data.table_images[k].image_path %>"><img width=200px height="200px"
+                    src="<%= data.table_images[k].image_path %>"></a>
+                  </div>
+                  <%} %>
+                </div>
+                <% }%>
+              </div>
     </div>
-    <h1></h1>
-    <h1></h1>
-    <h1></h1>
-    <h1></h1>
   </div>
 </body>
 
