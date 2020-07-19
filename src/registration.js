@@ -43,7 +43,7 @@ con.connect(function (err) {
         });
         let interests = [ 'Fitness' , 'loving', 'caring', 'sweet', 'cars', 'movies', 'sunsets' ,'art', 'photography', 'fashion', 'coding' ];
         let tags = faker.random.arrayElement(interests);
-        let bio = faker.lorem.text();
+        let bio = faker.lorem.sentence(5);
         let latitude =  Math.random() * (49.026657 - 48.736129) + 48.736129; // generate -90 90
         let longitude = Math.random() * (2.549672 - 2.10954) + 2.10954; // generate -180 180 48.882072
         let pic = faker.image.avatar();
