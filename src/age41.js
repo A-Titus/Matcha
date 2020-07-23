@@ -22,7 +22,7 @@ router.get('/', (req, res)=>{
             }else{
                console.log(results);
                res.json(results)
-               res.render('../views/home');
+               //res.render('../views/home');
             }
         });
     }    

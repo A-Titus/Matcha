@@ -76,6 +76,7 @@ router.post("/name", urlencodedParser, function (req, res) {
         if (err) throw err;
         con.query("SELECT * FROM `interests` WHERE `username` = ?", req.session.user, function(err, tags, fields){
           if (err) throw err;
+
           con.query(
             "UPDATE user SET `name` = ? Where  `username` = ?",
             [name, req.session.user],
@@ -87,6 +88,11 @@ router.post("/name", urlencodedParser, function (req, res) {
                 res.redirect("/updateProfile");
               } else {
                 console.log("name updated");
+                con.query("UPDATE user_filter SET name = ? WHERE username = ?", [name, req.session.user], function (err, result) {
+                  if (err) {
+                    console.log(err);
+                  }
+                  });
                 res.redirect("/updateProfile");
               }
             }
@@ -109,6 +115,11 @@ router.post("/surname", urlencodedParser, function (req, res) {
         res.redirect("/updateProfile");
       } else {
         console.log("surname updated");
+        con.query("UPDATE user_filter SET surname = ? WHERE username = ?", [surname, req.session.user], function (err, result) {
+          if (err) {
+            console.log(err);
+          }
+          });
         res.redirect("/updateProfile");
       }
     }
@@ -155,6 +166,40 @@ router.post("/username", urlencodedParser, function (req, res) {
                       res.redirect("/updateProfile");
                     }
                   });
+
+                  con.query("UPDATE user_filter SET username = ? WHERE username = ?", [username, old_username], function (err, result) {
+                    if (err) {
+                      console.log(err);
+                    }
+                    });
+
+                  con.query("UPDATE user_invite SET username = ? WHERE username = ?", [username, old_username], function (err, result) {
+                      if (err) {
+                        console.log(err);
+                      }
+                      });
+
+                   con.query("UPDATE user_like SET username = ? WHERE username = ?", [username, old_username], function (err, result) {
+                        if (err) {
+                          console.log(err);
+                        }
+                        });
+
+                  con.query("UPDATE user_report SET username = ? WHERE username = ?", [username, old_username], function (err, result) {
+                      if (err) {
+                        console.log(err);
+                        }
+                      });
+
+                  con.query("UPDATE user_block SET username = ? WHERE username = ?", [username, old_username], function (err, result) {
+                    if (err) {
+                      console.log(err);
+                    }
+                    });
+     
+  
+
+                    
 
                 req.session.Msg = null;
                 req.session.user = username;
@@ -286,6 +331,12 @@ router.post('/userProfile',urlencodedParser, function (req, res) {
       } else {
         console.log("data uploaded succesfully") ;
         req.session.Msg = "Profile updated successfully";
+
+        con.query("UPDATE user_filter SET gender = ?, pref_gender = ?, bio = ?, age = ? WHERE username = ?", [gender, pref_gender, bio, age, req.session.user], function (err, result) {
+          if (err) {
+            console.log(err);
+          }
+        })
         res.redirect("/updateProfile");
       }
     });
@@ -356,6 +407,19 @@ router.post('/userProfile',urlencodedParser, function (req, res) {
       } else { 
         req.session.Msg = null;
         console.log("Profile Pic updated succesfully");
+        con.query("SELECT image_path FROM images WHERE username = ? AND profile_pic = ?", [req.session.user, 1], function (err, proPic) {
+          if (err) {
+            console.log(err);
+          }
+          
+          if(proPic.length){
+            con.query("UPDATE user_filter SET image_path = ? WHERE username = ? ", [proPic[0].image_path, req.session.user], function (err, result) {
+            if (err) {
+              console.log(err);
+            }
+            });
+          }
+        });
         res.redirect("/updateProfile");
       }
     })

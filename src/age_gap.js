@@ -27,7 +27,7 @@ router.get('/', (req, res)=>{
                 console.log(e['username'])
             })
                res.json(results)
-               res.render('../views/home');
+               //res.render('../views/home');
             }
             // res.writeHead(200);
             // res.write(JSON.stringify(results));

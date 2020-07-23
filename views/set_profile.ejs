@@ -122,8 +122,8 @@
       </div>
       </form>
     </div>
-    <hr />
-    <br />
+
+    <br /><br /> <br /> <br /> 
 
     <div class="getLocation">
       <label for="location">Allow Matcha to access your location?</label> <br />
@@ -139,7 +139,7 @@
         </button>
       </form>
     </div>
-      <hr />
+    <br /> <br /> <br /> 
       <br />
       <div class="setProfile4">
         <form action="/setProfile/interests" method="POST"> 
@@ -169,8 +169,7 @@
 
       </div>
       
-      <hr />
-      <br /> 
+      <br /> <br /> <br /> 
       
       <div class="setProfile2">
         <form action="/uploads" enctype="multipart/form-data" method="POST"> 
@@ -188,7 +187,7 @@
             if (photos !== []) {
               for (var j = 0; j < photos.length; j++) { %>
               <div class="col-sm profil-gal">
-                  <img src="<%=photos[j].image_path%>" class="image_display" id="<%=photos[j].img_id%>" alt="...">
+                <a href="<%= photos[j].image_path %>"><img src="<%=photos[j].image_path%>" class="image_display" id="<%=photos[j].img_id%>" alt="..."></a>
                   <form action="/setProfile/delete" method="POST">
                     <br/>
                   <button name="deletebtn" value="<%=photos[j].img_id%>" type="submit">delete</button>

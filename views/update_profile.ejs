@@ -23,10 +23,12 @@
           <ul class="nav navbar-nav">
             <li><a href="/">Home</a></li>
             <li class="active"><a href="/updateProfile">Update Profile</a></li>
+            <li><a href="/search_user">Search users</a></li>
             <li><a href="/chat">Chat</a></li>
+            <li><a href="/filter">Filter</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="/profile"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+            <li><a href="/profile"><span class="glyphicon glyphicon-user"></span> <%=username%></a></li>
             <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
           </ul>
         </div>
@@ -242,7 +244,7 @@
               if (photos !== []) {
                 for (var j = 0; j < photos.length; j++) { %>
                 <div class="col-sm profil-gal">
-                    <img src="<%=photos[j].image_path%>" class="image_display" id="<%=photos[j].img_id%>" alt="...">
+                  <a href="<%= photos[j].image_path %>"><img src="<%=photos[j].image_path%>" class="image_display" id="<%=photos[j].img_id%>" alt="..."></a>
                     <form action="/updateProfile/delete" method="POST">
                       <br/>
                     <button name="deletebtn" value="<%=photos[j].img_id%>" type="submit">delete</button>

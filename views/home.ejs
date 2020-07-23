@@ -2,14 +2,14 @@
 <html lang="en">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link
-      rel="stylesheet"
-      href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
-    />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="../style.css" />
 
     <meta charset="utf-8" />
     <script type="text/javascript" src="../helpers/helper1.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
     <title>Home</title>
   </head>
 
@@ -22,111 +22,73 @@
       <ul class="nav navbar-nav">
         <li class="active"><a href="/">Home</a></li>
         <li><a href="/updateProfile">Update Profile</a></li>
+        <li><a href="/search_user">Search users</a></li>
         <li><a href="/chat">Chat</a></li>
+        <li><a href="/filter">Filter</a></li>
       </ul>
 
-      <div class="dropdown">
-        <button class="dropbtn">Filter</button>
-        <div class="dropdown-content">
-        <a><button onclick="myage()">Age 18-25</button></a>
-        <a><button onclick="age26()">Age 26-30</button></a>
-        <a><button onclick="age31()">Age 31-40</button></a>
-        <a><button onclick="age41()">Age 41-50</button></a>
-        <a><button onclick="age51()">Age 51-65</button></a>
-        <a><button onclick="interests()">interests</button></a>
-        </div>
-      </div>
-
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="/profile"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+        <li><a href="/profile"><span class="glyphicon glyphicon-user"></span> <%=user%></a></li>
         <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
       </ul>
     </div>
   </nav>
   <div>
-      <h1>this is the main page</h1>
-      <p id="table" style="color: aliceblue;"></P>
-        <p id="table1" style="color: aliceblue;"></P>
-        <p id="table2" style="color: aliceblue;"></P>
-        <p id="table3" style="color: aliceblue;"></P>
-        <p id="table4" style="color: aliceblue;"></P>
-        <p id="table5" style="color: aliceblue;"></P>
-  </div>
+    <div class="sort">
+      <div class="dropdown">
+        <button class="btn btn-danger dropdown-toggle" type="button" data-toggle="dropdown">Sort
+        <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+         <li> <form action="/sort/age" method="GET">
+                <button type="submit" class="btn btn-danger btn-sm my-4">age (Low-High)</button>
+              </form>
+        </li>
 
-  <script text="text/javascript">
-    function myage(){
-        var xhttp;
-        xhttp = new XMLHttpRequest()
-        xhttp.onreadystatechange = function() {
-         if (this.readyState == 4 && this.status == 200) {
-         document.getElementById("table").innerHTML = this.responseText;
-        //  console.log(data);
-         }
-        };
-        xhttp.open('GET', '/agegap', true);
-        xhttp.send();
-        }  
-        function interests(){
-        var xhttp;
-        xhttp = new XMLHttpRequest()
-        xhttp.onreadystatechange = function() {
-         if (this.readyState == 4 && this.status == 200) {
-         document.getElementById("table1").innerHTML = this.responseText;
-        //  console.log(data);
-         }
-        };
-        xhttp.open('GET', '/interest', true);
-        xhttp.send();
-        }  
-        function age26(){
-        var xhttp;
-        xhttp = new XMLHttpRequest()
-        xhttp.onreadystatechange = function() {
-         if (this.readyState == 4 && this.status == 200) {
-         document.getElementById("table2").innerHTML = this.responseText;
-        //  console.log(data);
-         }
-        };
-        xhttp.open('GET', '/age2630', true);
-        xhttp.send();
-        } 
-        function age31(){
-        var xhttp;
-        xhttp = new XMLHttpRequest()
-        xhttp.onreadystatechange = function() {
-         if (this.readyState == 4 && this.status == 200) {
-         document.getElementById("table3").innerHTML = this.responseText;
-        //  console.log(data);
-         }
-        };
-        xhttp.open('GET', '/age31', true);
-        xhttp.send();
-        } 
-        
-        function age41(){
-        var xhttp;
-        xhttp = new XMLHttpRequest()
-        xhttp.onreadystatechange = function() {
-         if (this.readyState == 4 && this.status == 200) {
-         document.getElementById("table4").innerHTML = this.responseText;
-        //  console.log(data);
-         }
-        };
-        xhttp.open('GET', '/age41', true);
-        xhttp.send();
-        }  
-        function age51(){
-        var xhttp;
-        xhttp = new XMLHttpRequest()
-        xhttp.onreadystatechange = function() {
-         if (this.readyState == 4 && this.status == 200) {
-         document.getElementById("table5").innerHTML = this.responseText;
-        //  console.log(data);
-         }
-        };
-        xhttp.open('GET', '/age51', true);
-        xhttp.send();
-        }  
-  </script>
+        <li> <form action="/sort/ageDesc" method="GET">
+            <button type="submit" class="btn btn-danger btn-sm my-4">age (High-low)</button>
+          </form>
+        </li>
+
+          <li><form action="/sort/location" method="GET">
+            <button type="submit" class="btn btn-danger btn-sm my-4">Location (Low-High)</button>
+          </form>
+        </li>
+
+        <li><form action="/sort/locationDesc" method="GET">
+          <button type="submit" class="btn btn-danger btn-sm my-4">Location (High-low)</button>
+        </form>
+      </li>
+
+    <li><form action="/sort/popularity" method="GET">
+      <button type="submit" class="btn btn-danger btn-sm my-4">Popularity (Low-High)</button>
+    </form>
+  </li>
+
+  <li><form action="/sort/popularityDesc" method="GET">
+      <button type="submit" class="btn btn-danger btn-sm my-4">Popularity (High-low)</button>
+    </form>
+  </li>
+        </ul>
+      </div>
+      
+    </div>
+
+      <% if (userData != null){
+        if (userData !== []) {
+          for (var j = 0; j < userData.length; j++) { %>
+            <form action="/filter/<%=userData[j].username%>" id="userForm" method="get">
+              <div class="displayUsers">
+                <img src="<%=userData[j].image_path%>" class="users_display" id="<%=userData[j].id%>" alt="...">
+                <h3><%=userData[j].username%></h3>
+                <p>age: <%=userData[j].age%></p>
+                <p>gender: <%=userData[j].gender%></p>
+
+                
+                <button type="submit" class="btn btn-danger btn-block my-4">View Profile</button>
+            </div>
+          </form>
+          <%   }} 
+     } %>  
+  </div>
 </body>
 </html>

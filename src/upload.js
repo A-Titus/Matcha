@@ -51,7 +51,7 @@ router.post("/", upload.single("image"), (req, res, next) => {
   var image_name = req.file.filename;
   var image_path = req.file.path;
 
-  var new_path = image_path.replace("public/", "");
+  var new_path = image_path.replace("public/", "http://localhost:3000/");
 
   var record = {
     image_name: image_name,

@@ -41,7 +41,7 @@ con.connect(function (err) {
           'min': 18,
           'max': 70
         });
-        let interests = [ 'Fitness' , 'loving', 'caring', 'sweet', 'cars', 'movies', 'sunsets' ,'art', 'photography', 'fashion', 'coding' ];
+        let interests = [ '#Fitness' , '#loving', '#caring', '#sweet', '#cars', '#movies', '#sunsets' ,'#art', '#photography', '#fashion', '#coding' ];
         let tags = faker.random.arrayElement(interests);
         let bio = faker.lorem.sentence(5);
         let latitude =  Math.random() * (49.026657 - 48.736129) + 48.736129; // generate -90 90
@@ -67,12 +67,17 @@ con.connect(function (err) {
         con.query(sql, [tags, username],function (err, result) {
           if (err) throw err;
         });
+
+        sql = "INSERT INTO user_filter (username, name, surname, gender, pref_gender, bio, age, image_path, profile_pic, likes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        con.query(sql, [username, firstName, lastName, gender, pref_gender, bio, age, pic, 1, 0],function (err, result) {
+          if (err) throw err;
+        });
       }
 
   }
     // generateUsers();
     // console.log('500 records inserted!');
-    // console.log('faker commented out for now');
+     console.log('faker commented out for now');
 
 router.get("/", function (req, res) {
   res.render("registration", {msg: null});
@@ -149,6 +154,19 @@ router.post("/", urlencodedParser, function (req, res) {
         longitude: null,
       };
 
+      var user_filter = {
+        username: username,
+        name: name,
+        surname: surname,
+        gender: null,
+        pref_gender: null,
+        bio: null,
+        age: null,
+        image_path: null,
+        profile_pic: 1,
+        likes: 0,
+      };
+
 
       con.query("INSERT INTO user_profile SET?", profile_record, function (err, result) {
         if (err) {
@@ -157,6 +175,14 @@ router.post("/", urlencodedParser, function (req, res) {
           console.log(err);
         }
         })
+
+        con.query("INSERT INTO user_filter SET?", user_filter, function (err, result) {
+          if (err) {
+            status = "Unable to create this user";  //set user filter to null intitially
+            console.log(status);
+            console.log(err);
+          }
+          })
 
       con.query("INSERT INTO user SET?", user_record, function (err, result) {
         if (err) {

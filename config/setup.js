@@ -40,7 +40,7 @@ function database() {
       console.log("image Table created");
     });
 
-    var sql = "CREATE TABLE IF NOT EXISTS user_profile (id int AUTO_INCREMENT PRIMARY KEY, gender varchar(255) , pref_gender varchar(255) , bio varchar(255), age int(11), username varchar(255), latitude decimal(20, 10), longitude decimal(20, 10))";
+    var sql = "CREATE TABLE IF NOT EXISTS user_profile (id int AUTO_INCREMENT PRIMARY KEY, gender varchar(255) , pref_gender varchar(255) , bio varchar(255), age int(11), username varchar(255), latitude decimal(20, 10), longitude decimal(20, 10), last_seen varchar(255))";
       con.query(sql, function (err, result) {
         if (err) throw err;
         console.log("user_profile Table created");
@@ -58,8 +58,46 @@ function database() {
         console.log("interests Table created");
       });
 
+      var sql = "CREATE TABLE IF NOT EXISTS user_invite (id int AUTO_INCREMENT PRIMARY KEY, username varchar(255) , requ_user varchar(255))";
+      con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("user_invite Table created");
+      });
+
+      var sql = "CREATE TABLE IF NOT EXISTS user_like (id int AUTO_INCREMENT PRIMARY KEY, username varchar(255) , requ_user varchar(255))";
+      con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("user_liked Table created");
+      });
+
+      var sql = "CREATE TABLE IF NOT EXISTS user_report (id int AUTO_INCREMENT PRIMARY KEY, username varchar(255) , requ_user varchar(255))";
+        con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("user_report Table created");
+        });
+      
+        var sql = "CREATE TABLE IF NOT EXISTS user_block (id int AUTO_INCREMENT PRIMARY KEY, username varchar(255) , requ_user varchar(255))";
+        con.query(sql, function (err, result) {
+          if (err) throw err;
+          console.log("user_block Table created");
+        });
+
+        var sql = "CREATE TABLE IF NOT EXISTS user_filter (id int AUTO_INCREMENT PRIMARY KEY, username varchar(255), name varchar(255), surname varchar(255),  gender varchar(255) , pref_gender varchar(255) , bio varchar(255), age int(11), image_path varchar(255), profile_pic boolean, likes int(11))";
+        con.query(sql, function (err, result) {
+          if (err) throw err;
+          console.log("user_filter Table created");
+        });
+
+        var sql = "CREATE TABLE IF NOT EXISTS filter_tags (id int AUTO_INCREMENT PRIMARY KEY, interests varchar(255))";
+        con.query(sql, function (err, result) {
+          if (err) throw err;
+          console.log("filter_tags Table created");
+          console.log("Done");
+        })
+        
   });
 
 }
 database();
 setTimeout(table, 3500);
+

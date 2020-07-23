@@ -72,6 +72,11 @@ router.get("/", function (req, res) {
         res.redirect("/setProfile");
       } else { 
         console.log("data uploaded succesfully") ;
+        con.query("UPDATE user_filter SET gender = ?, pref_gender = ?, bio = ?, age = ? WHERE username = ?", [gender, pref_gender, bio, age, req.session.user], function (err, result) {
+          if (err) {
+            console.log(err);
+          }
+          });
         res.redirect("/setProfile");
       }
     });
@@ -223,9 +228,23 @@ router.get("/", function (req, res) {
         res.redirect("/setProfile");
       } else { 
         console.log("Profile Pic updated succesfully");
+        con.query("SELECT image_path FROM images WHERE username = ? AND profile_pic = ?", [req.session.user, 1], function (err, proPic) {
+            if (err) {
+              console.log(err);
+            }
+          
+            if(proPic.length){
+              con.query("UPDATE user_filter SET image_path = ? WHERE username = ? ", [proPic[0].image_path, req.session.user], function (err, result) {
+              if (err) {
+                console.log(err);
+              }
+              });
+            }
+          });
         res.redirect("/setProfile");
       }
     })
+
   });
 
   router.post('/delete',urlencodedParser, function (req, res) {

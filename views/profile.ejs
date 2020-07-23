@@ -22,7 +22,9 @@
           <ul class="nav navbar-nav">
             <li ><a href="/">Home</a></li>
             <li><a href="/updateProfile">Update Profile</a></li>
+            <li><a href="/search_user">Search users</a></li>
             <li><a href="/chat">Chat</a></li>
+            <li><a href="/filter">Filter</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="active"><a href="/profile"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
@@ -54,7 +56,7 @@
         <% if (photos != null){
         if (photos !== []) {
           for (var j = 0; j < photos.length; j++) { %>
-              <img src="<%=photos[j].image_path%>" class="userInfoImgdisplay" id="<%=photos[j].img_id%>" alt="..." width="50" height="50">
+            <a href="<%= photos[j].image_path %>"><img src="<%=photos[j].image_path%>" class="userInfoImgdisplay" id="<%=photos[j].img_id%>" alt="..." width="50" height="50"></a>
           <%   }} 
      } %>
       </div>
@@ -66,7 +68,7 @@
         <img class="profilePic" src="<%=profile_picture%>" alt="...">
       <% } %>
 
-    <div class="userInfo1">
+    <div class="userInfo2">
     <p>name: <%=name%></p>
     <p>surname: <%=surname%></p>
     <p>email: <%=email%></p>

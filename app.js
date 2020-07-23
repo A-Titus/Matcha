@@ -5,11 +5,12 @@ var bodyParser = require('body-parser');
 var app = express();
 
 const server = require('http').createServer(app);
-const io = require('socket.io')(server);
+ const io = require('socket.io')(server);
+var con = require("./config/connection");
 
 app.set("view engine", "ejs");
 
-app.listen(3000);
+server.listen(3000);
 
 var registration = require('./src/registration');
 var login = require('./src/login');
@@ -26,7 +27,14 @@ var interest = require('./src/interest');
 var age31 = require('./src/age31');
 var age41 = require('./src/age41');
 var age51 = require('./src/age51');
-//var chat = require('./src/chat');
+var search_user = require('./src/search_user');
+var connect = require('./src/connect');
+var likes = require('./src/likes');
+var block = require('./src/block');
+var filter = require('./src/filter');
+var chat = require('./src/chat')[0];
+var chatjs = require('./src/chat')[1];
+var sort = require('./src/sort');
 
 // app.get("*", function (req, res) {
 //   res.render("error");
@@ -54,7 +62,15 @@ app.use('/age31', age31)
 app.use('/age2630', age26_30)
 app.use('/interest', interest);
 app.use('/agegap', agegap);
-//app.use('/chat', chat);
+app.use('/search_user', search_user);
+app.use('/connect',connect);
+app.use('/likes',likes);
+app.use('/block',block);
+app.use('/filter',filter);
+app.use('/chat', chat);
+app.use('/sort', sort);
+chatjs(io);
+
 
 app.get("/", function (req, res) {
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
@@ -64,22 +80,39 @@ app.get("/", function (req, res) {
   else
      if(!req.session.profile)
      res.redirect("/setProfile");
-      else
-      res.render("home");
+      else{
+        req.session.gender = null;
+        req.session.minage = null;
+        req.session.maxage = null;
+        con.query("SELECT * FROM `user_profile` WHERE username = ?",[req.session.user], function (err, usersInfo, fields) {
+          if (err) throw err;
+          ageAbove= usersInfo[0].age + 5;
+          ageBelow= usersInfo[0].age - 5;
+          if(usersInfo[0].pref_gender == "bisexual"){
+            con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `age` BETWEEN ? AND ? AND `username` IN (SELECT `username` FROM `interests` WHERE `interests` IN (SELECT `interests` FROM `interests` WHERE `username` = ?))", [req.session.user, ageBelow, ageAbove, req.session.user], function (err, results, fields) {
+              if (err) throw err;
+              res.render("home", {userData: results, user: req.session.user});
+          })
+          }else{
+            con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `gender` = ? AND `age` BETWEEN ? AND ? AND `username` IN (SELECT `username` FROM `interests` WHERE `interests` IN (SELECT `interests` FROM `interests` WHERE `username` = ?))", [req.session.user, usersInfo[0].pref_gender, ageBelow, ageAbove, req.session.user], function (err, results, fields) {
+              if (err) throw err;
+              res.render("home", {userData: results, user: req.session.user});
+          })
+          }
+      });
+    }
      
   });
 
   app.get("/logout", function (req, res) {
+    var dateUser = new Date().toUTCString();
+    console.log("Logout time : " |+dateUser);
+    con.query("UPDATE user_profile SET last_seen = (?) WHERE username = (?)", [dateUser,req.session.user]);
       req.session.destroy();
       res.redirect("/login");
     });
 
 ///////////////////
-
-app.get('/chat', function(req, res) {
-  res.render("chat");
-});
-
 
 app.use(function (request, result, next) {
 	result.setHeader("Access-Control-Allow-Origin", "*");
@@ -97,21 +130,3 @@ app.get("/", function (request, result) {
 });
 
 var users = [];
-
-io.on("connection", function (socket) {
-	console.log("User connected: ",  socket.id);
-
-	socket.on("user_connected", function (username) {
-		users[username] = socket.id;
-		io.emit("user_connected", username);
-	});
-
-	socket.on("send_message", function (data) {
-		var socketId = users[data.receiver];
-		socket.to(socketId).emit("message_received", data);
-
-		connection.query("INSERT INTO messages (sender, receiver, message) VALUES ('" + data.sender + "', '" + data.receiver + "', '" + data.message + "')", function (error, result) {
-			//
-		});
-	});
-});
