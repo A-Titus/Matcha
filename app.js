@@ -119,12 +119,19 @@ app.use(function (request, result, next) {
 	next();
 });
 
-app.post("/get_messages", function (request, result) {
-	connection.query("SELECT * FROM messages WHERE (sender = '" + request.body.sender + "' AND receiver = '" + request.body.receiver + "') OR (sender = '" + request.body.receiver + "' AND receiver = '" + request.body.sender + "')", function (error, messages) {
-		result.end(JSON.stringify(messages));
-	});
-});
+app.use(function (request, result, next) {
+  result.setHeader("Access-Control-Allow-Origin", "*");
+  next();
+})
 
+
+//an API for get_message
+app.get("/get_messages", function (request, result) {
+  con.query("SELECT username, message FROM messages ORDER BY message ASC", function (err, messages) {
+    //return data will be in JSON format
+    result.end(JSON.stringify(messages));
+  });
+});
 app.get("/", function (request, result) {
 	result.end("Hello world !");
 });

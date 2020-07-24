@@ -46,7 +46,7 @@ function database() {
         console.log("user_profile Table created");
       });
 
-      var sql = "CREATE TABLE IF NOT EXISTS messages (id int AUTO_INCREMENT PRIMARY KEY , sender TEXT NOT NULL , receiver TEXT NOT NULL , message TEXT NOT NULL)";
+      var sql = "CREATE TABLE IF NOT EXISTS messages (id int AUTO_INCREMENT PRIMARY KEY , username TEXT NOT NULL , message TEXT NOT NULL)";
       con.query(sql, function (err, result) {
         if (err) throw err;
         console.log("message Table created");

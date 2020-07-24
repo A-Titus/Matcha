@@ -4,6 +4,9 @@ var mysql = require("mysql");
 //var io = require('socket.io');
 const express = require('express');
 var router = express.Router();
+var con = require("../config/connection");
+
+
 
 users = [];
 connections = [];
@@ -23,8 +26,18 @@ io.on('connection', function (socket) {
     });
     //send message
     socket.on('send_message', function (data) {
-        console.log("listening from send endpoint");
+        //console.log("listening from send endpoint");
         io.sockets.emit('new_message', { msg: data, user: socket.username });
+        
+        io.emit("send_message", { msg: data, user: socket.username});
+        
+        sql = "INSERT INTO messages (username, message) VALUES(?, ?)";
+        
+        con.query(sql, [socket.username, data], function(err, result){
+            //console.log('iserted into mssgs');
+            //
+        })
+        
     });
 
     socket.on('new user', function (data, callback) {
@@ -39,11 +52,24 @@ io.on('connection', function (socket) {
     }
 });
 
+//an API for get_message
+// app.get("/get_messages", function(request, result){
+//     con.query("SELECT username, message FROM messages", function(err, messages){
+//         result.end();
+//     });
+// })
+
 router.get('/', function (req, res) {
-     res.render('chat', {username: req.session.user});
+     res.render('chat');
  });
 };
 module.exports = [ router, chating ];
+
+
+
+
+
+
 
 
 

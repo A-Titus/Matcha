@@ -1,14 +1,13 @@
-
 <html>
     <head>
         <title>Chat-page</title>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js'></script>
-        <!-- <script src="/node_modules/socket.io-client/dist/socket.io.js"></script> -->
-        <script scr="/src/socket.io.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         
         <script type="text/javascript">
+
+        var server ="http://localhost:3000";
             $(function () {
                 var socket = io.connect();
                 var $messageForm = $('#messageForm');
@@ -27,8 +26,28 @@
                     $message.val('');
                 });
 
+                $.ajax({
+                    url: server + "/get_messages",
+                    method: "GET",
+                    success: function (response){
+                        // console.log(response);
+
+                        // //parse JSON to javascript object
+                        var data = JSON.parse(response);
+                        // for (var a = 0; a < data.length; a++){
+                        //     //display messages
+                            
+                        // }
+                        data.forEach(row => {
+                            if (data.user == socket.username){
+                                $chat.append('<div class="well"><strong>' + row.username + '</strong>:' + row.message + '</div>');
+                            }
+                        });
+                    }
+                });
+
                 socket.on('new_message', function(data) {
-                    $chat.append('<div class="well"><strong>'+data.user+'</strong>:' + data.msg + '</div>');
+                        $chat.append('<div class="well"><strong>'+data.user+'</strong>:' + data.msg + '</div>');
                 });
 
                 $userForm.submit(function (e) {
@@ -65,9 +84,9 @@
             .messageForm{
                 background-color: rgba(90, 30, 43, 0.452);
             }
-            #messageArea{
+            /* #messageArea{
                 display: none;
-            }
+            } */
             .chat{
                 color: rgb(231, 233, 227);
             }
@@ -98,14 +117,16 @@
                     </div>
                 </div>
                 <div class="col-md-8">
+                    <form id="messageForm">
+                        <div class="form-group">
+                            <label>
+                                <h5>Message</h5>
+                            </label>
+                            <textarea class="form-control" id="message"></textarea><br>
+                            <input type="submit" class="btn btn-primary" value="send">
+                        </div>
+                    </form>
                     <div class="chat" id="chat" >
-                        <form id="messageForm">
-                            <div class="form-group">
-                                <label><h5>Message</h5></label>
-                                <textarea class="form-control" id="message"></textarea><br>
-                                <input type="submit" class="btn btn-primary" value="send">
-                            </div>
-                        </form>
                      </div>
                 </div>
             </div>
