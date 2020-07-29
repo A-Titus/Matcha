@@ -44,8 +44,11 @@ con.connect(function (err) {
         let interests = [ '#Fitness' , '#loving', '#caring', '#sweet', '#cars', '#movies', '#sunsets' ,'#art', '#photography', '#fashion', '#coding' ];
         let tags = faker.random.arrayElement(interests);
         let bio = faker.lorem.sentence(5);
-        let latitude =  Math.random() * (49.026657 - 48.736129) + 48.736129; // generate -90 90
-        let longitude = Math.random() * (2.549672 - 2.10954) + 2.10954; // generate -180 180 48.882072
+        let latitude =  faker.address.latitude();
+        let longitude = faker.address.longitude();
+        let city = faker.address.city();
+        let country = faker.address.country();
+        
         let pic = faker.image.avatar();
 
         sql = "INSERT INTO user (name, surname, username, email, password, verifkey, verified, setup) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -53,8 +56,8 @@ con.connect(function (err) {
           if (err) throw err;
         });
 
-        sql = "INSERT INTO user_profile (gender, pref_gender, bio, age, username, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        con.query(sql, [gender, pref_gender, bio, age, username, latitude, longitude],function (err, result) {
+        sql = "INSERT INTO user_profile (gender, pref_gender, bio, age, username, latitude, longitude, city, country) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        con.query(sql, [gender, pref_gender, bio, age, username, latitude, longitude, city, country],function (err, result) {
           if (err) throw err;
         });
 
@@ -68,16 +71,17 @@ con.connect(function (err) {
           if (err) throw err;
         });
 
-        sql = "INSERT INTO user_filter (username, name, surname, gender, pref_gender, bio, age, image_path, profile_pic, likes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        con.query(sql, [username, firstName, lastName, gender, pref_gender, bio, age, pic, 1, 0],function (err, result) {
+        sql = "INSERT INTO user_filter (username, name, surname, gender, pref_gender, bio, age, image_path, profile_pic, likes, latitude, longitude, city, country) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        con.query(sql, [username, firstName, lastName, gender, pref_gender, bio, age, pic, 1, 0, latitude, longitude, city, country],function (err, result) {
           if (err) throw err;
         });
       }
 
   }
-    // generateUsers();
-    // console.log('500 records inserted!');
-     console.log('faker commented out for now');
+    generateUsers();
+    console.log('500 records inserted!');
+    //  console.log('faker commented out for now');
+
 
 router.get("/", function (req, res) {
   res.render("registration", {msg: null});
@@ -152,6 +156,8 @@ router.post("/", urlencodedParser, function (req, res) {
         username: username,
         latitude: null,
         longitude: null,
+        city: null,
+        country: null,
       };
 
       var user_filter = {
@@ -165,6 +171,11 @@ router.post("/", urlencodedParser, function (req, res) {
         image_path: null,
         profile_pic: 1,
         likes: 0,
+        latitude: 0,
+        longitude: 0,
+        city: null,
+        country: null,
+        distance:null,
       };
 
 

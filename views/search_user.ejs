@@ -20,8 +20,11 @@
         <a class="navbar-brand" href="/">Matcha</a>
       </div>
       <ul class="nav navbar-nav">
-        <li class="active"><a href="/">Home</a></li>
+        <li><a href="/">Home</a></li>
         <li><a href="/updateProfile">Update Profile</a></li>
+        <li  class="active"><a href="/search_user">Search users</a></li>
+        <li><a href="/chat">Chat</a></li>
+        <li><a href="/filter">Filter</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/profile"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
@@ -157,7 +160,6 @@
             <h1> Age:<%= data.x[0].age%> </h1>
             <h1>Present : <%= data.disable_likes %> </h1>
             <h1> Bio:<%= data.x[0].bio%> </h1>
-            <h1> Popularity rating </h1>
             <h1> Last seen:<%= data.x[0].last_seen%> </h1> 
             <button name="connect_click"
             onclick="Ask_connect('find1'),display_user('<%= data.x[0].username%>',null)">Connect</button>

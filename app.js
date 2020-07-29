@@ -3,6 +3,7 @@ var session = require("express-session");
 var bodyParser = require('body-parser');
 //var io = require("socket.io");
 var app = express();
+const geolib = require('geolib');
 
 const server = require('http').createServer(app);
  const io = require('socket.io')(server);
@@ -21,12 +22,6 @@ var updateProfile = require('./src/update_profile');
 var confirm = require('./src/confirm');
 var resetPassword = require('./src/reset_password');
 var location = require('./src/location');
-var agegap = require('./src/age_gap');
-var age26_30 = require('./src/age26_30');
-var interest = require('./src/interest');
-var age31 = require('./src/age31');
-var age41 = require('./src/age41');
-var age51 = require('./src/age51');
 var search_user = require('./src/search_user');
 var connect = require('./src/connect');
 var likes = require('./src/likes');
@@ -56,12 +51,6 @@ app.use('/updateProfile', updateProfile);
 app.use('/confirm', confirm); 
 app.use('/resetPassword', resetPassword);
 app.use('/location', location);
-app.use('/age51', age51)
-app.use('/age41', age41)
-app.use('/age31', age31)
-app.use('/age2630', age26_30)
-app.use('/interest', interest);
-app.use('/agegap', agegap);
 app.use('/search_user', search_user);
 app.use('/connect',connect);
 app.use('/likes',likes);
@@ -81,25 +70,65 @@ app.get("/", function (req, res) {
      if(!req.session.profile)
      res.redirect("/setProfile");
       else{
+        req.session.connect_invite = null;
         req.session.gender = null;
         req.session.minage = null;
         req.session.maxage = null;
+
+        con.query("SELECT latitude, longitude FROM user_filter WHERE username = ?", [req.session.user], function (err, myCo) {
+          if (err) throw err;
+        con.query("SELECT latitude, longitude, username FROM user_filter WHERE username != ?", [req.session.user], function (err, usersCo) {
+          if (err) throw err;
+      
+          usersCo.forEach(function(row) {
+              
+              if(geolib.isPointWithinRadius(
+                  { latitude: row.latitude, longitude: row.longitude },
+                  { latitude: myCo[0].latitude, longitude: myCo[0].longitude },
+                  50000
+              )){
+                  con.query("INSERT INTO filter_locations (username)  VALUES (?)", [row.username], function (err, myCo) {
+                      if (err) throw err;
+                  })
+  
+              }
+          });
+      
+      })
+  })
+
+        con.query("SELECT COUNT (*) AS count FROM user", function (err, user_count) {
+          if (err) throw err;
+
         con.query("SELECT * FROM `user_profile` WHERE username = ?",[req.session.user], function (err, usersInfo, fields) {
           if (err) throw err;
           ageAbove= usersInfo[0].age + 5;
           ageBelow= usersInfo[0].age - 5;
+
+          con.query("SELECT * FROM user_block WHERE (username = (?) AND requ_user = (?)) ", [req.session.connect_invite, req.session.user], function (err, result) {
+            //console.log("the result :" + JSON.stringify(result));
+        if (err || !result.length || !result[0].requ_user)
+        {
+          
           if(usersInfo[0].pref_gender == "bisexual"){
-            con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `age` BETWEEN ? AND ? AND `username` IN (SELECT `username` FROM `interests` WHERE `interests` IN (SELECT `interests` FROM `interests` WHERE `username` = ?))", [req.session.user, ageBelow, ageAbove, req.session.user], function (err, results, fields) {
+            con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `age` BETWEEN ? AND ? AND `username` IN (SELECT `username` FROM `interests` WHERE `interests` IN (SELECT `interests` FROM `interests` WHERE `username` = ?)) AND `username` IN (SELECT `username` FROM `filter_locations`) ORDER BY `likes` DESC", [req.session.user, ageBelow, ageAbove, req.session.user], function (err, results, fields) {
               if (err) throw err;
-              res.render("home", {userData: results, user: req.session.user});
+              res.render("home", {userData: results, user: req.session.user, user_count: user_count[0].count});
           })
           }else{
-            con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `gender` = ? AND `age` BETWEEN ? AND ? AND `username` IN (SELECT `username` FROM `interests` WHERE `interests` IN (SELECT `interests` FROM `interests` WHERE `username` = ?))", [req.session.user, usersInfo[0].pref_gender, ageBelow, ageAbove, req.session.user], function (err, results, fields) {
+            con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `gender` = ? AND `age` BETWEEN ? AND ? AND `username` IN (SELECT `username` FROM `interests` WHERE `interests` IN (SELECT `interests` FROM `interests` WHERE `username` = ?)) AND `username` IN (SELECT `username` FROM `filter_locations`)  ORDER BY `likes` DESC", [req.session.user, usersInfo[0].pref_gender, ageBelow, ageAbove, req.session.user], function (err, results, fields) {
               if (err) throw err;
-              res.render("home", {userData: results, user: req.session.user});
+              res.render("home", {userData: results, user: req.session.user, user_count: user_count[0].count});
           })
           }
+          }else if ((req.session.user == result[0].requ_user))
+          { 
+          res.render('block_page', {data:{x:'You have been blocked by ' + result[0].username}});
+          console.log("Person has been blocked");
+          }
+        })
       });
+    });
     }
      
   });

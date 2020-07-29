@@ -126,16 +126,12 @@
     <br /><br /> <br /> <br /> 
 
     <div class="getLocation">
-      <label for="location">Allow Matcha to access your location?</label> <br />
+      <label for="location">location</label> <br />
       <br />
-      <button onclick="getLocation()">Get location</button>
       <form action="/location" method="POST">
-        <input type="hidden" name="lat" id="lat" required>
-        <input type="hidden" name="lng" id="lng" required>
-
         <br /><br />
         <button type="submit" class="btn btn-danger btn-block my-4">
-          Submit
+          Submit Location
         </button>
       </form>
     </div>
@@ -207,18 +203,3 @@
   </div>
 </html>
 
-<script>
-  function getLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-      x.innerHTML = "Geolocation is not supported by this browser.";
-    }
-  }
-  function showPosition(position) {
-        const lat = document.querySelector('#lat');
-        const lng = document.querySelector('#lng');
-        lat.value = position.coords.latitude;
-        lng.value = position.coords.longitude;
-    }
-</script>

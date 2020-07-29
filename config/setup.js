@@ -40,7 +40,7 @@ function database() {
       console.log("image Table created");
     });
 
-    var sql = "CREATE TABLE IF NOT EXISTS user_profile (id int AUTO_INCREMENT PRIMARY KEY, gender varchar(255) , pref_gender varchar(255) , bio varchar(255), age int(11), username varchar(255), latitude decimal(20, 10), longitude decimal(20, 10), last_seen varchar(255))";
+    var sql = "CREATE TABLE IF NOT EXISTS user_profile (id int AUTO_INCREMENT PRIMARY KEY, gender varchar(255) , pref_gender varchar(255) , bio varchar(255), age int(11), username varchar(255), latitude decimal(20, 10), longitude decimal(20, 10), city varchar(255), country varchar(255), last_seen varchar(255))";
       con.query(sql, function (err, result) {
         if (err) throw err;
         console.log("user_profile Table created");
@@ -82,7 +82,7 @@ function database() {
           console.log("user_block Table created");
         });
 
-        var sql = "CREATE TABLE IF NOT EXISTS user_filter (id int AUTO_INCREMENT PRIMARY KEY, username varchar(255), name varchar(255), surname varchar(255),  gender varchar(255) , pref_gender varchar(255) , bio varchar(255), age int(11), image_path varchar(255), profile_pic boolean, likes int(11))";
+        var sql = "CREATE TABLE IF NOT EXISTS user_filter (id int AUTO_INCREMENT PRIMARY KEY, username varchar(255), name varchar(255), surname varchar(255),  gender varchar(255) , pref_gender varchar(255) , bio varchar(255), age int(11), image_path varchar(255), profile_pic boolean, likes int(11), latitude decimal(20, 10), longitude decimal(20, 10), city varchar(255), country varchar(255), distance int(11))";
         con.query(sql, function (err, result) {
           if (err) throw err;
           console.log("user_filter Table created");
@@ -92,6 +92,12 @@ function database() {
         con.query(sql, function (err, result) {
           if (err) throw err;
           console.log("filter_tags Table created");
+        })
+
+        var sql = "CREATE TABLE IF NOT EXISTS filter_locations (id int AUTO_INCREMENT PRIMARY KEY, username varchar(255), distance int(11))";
+        con.query(sql, function (err, result) {
+          if (err) throw err;
+          console.log("filter_location Table created");
           console.log("Done");
         })
         

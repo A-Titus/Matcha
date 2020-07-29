@@ -196,6 +196,12 @@ router.post("/username", urlencodedParser, function (req, res) {
                       console.log(err);
                     }
                     });
+
+                    con.query("UPDATE messages SET username = ? WHERE username = ?", [username, old_username], function (err, result) {
+                      if (err) {
+                        console.log(err);
+                      }
+                      });
      
   
 

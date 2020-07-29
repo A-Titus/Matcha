@@ -4,6 +4,7 @@ var mysql = require("mysql");
 var bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
+const geolib = require('geolib');
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -11,10 +12,24 @@ var router = express.Router();
 var con = require("../config/connection");
 
 router.get('/', (req, res)=>{
+    if(!req.session.user){
+        res.render("login",{msg: "Please log in"});
+    }
+    else{
+
+        if(!req.session.profile)
+    res.redirect("/setProfile")
+    else{
     res.render("filter", {username: req.session.user, tag: null});
      con.query("DELETE FROM filter_tags", function (err, results, fields) {
             if (err) throw err;
-    })
+        })
+
+        con.query("DELETE FROM filter_locations", function (err, results, fields) {
+            if (err) throw err;
+        })
+    }  
+}  
 
 });
 
@@ -24,85 +39,109 @@ router.post('/',urlencodedParser, (req, res)=>{
    var maxage = req.body.maxage;
    var range = req.body.range;
    var rating = req.body.rate;
+   var distance = req.body.range;
+    distance = distance * 1000;
+   ///////////////////////
+   if(distance){
+       con.query("SELECT latitude, longitude FROM user_filter WHERE username = ?", [req.session.user], function (err, myCo) {
+        if (err) throw err;
+      con.query("SELECT latitude, longitude, username FROM user_filter WHERE username != ?", [req.session.user], function (err, usersCo) {
+        if (err) throw err;
+    
+        usersCo.forEach(function(row) {
+            
+            if(geolib.isPointWithinRadius(
+                { latitude: row.latitude, longitude: row.longitude },
+                { latitude: myCo[0].latitude, longitude: myCo[0].longitude },
+                distance
+            )){
+                con.query("INSERT INTO filter_locations (username)  VALUES (?)", [row.username], function (err, myCo) {
+                    if (err) throw err;
+                })
+
+            }
+        });
+    
+    })
+})
+
+}
+
+
+   //////////////////////////
 
    req.session.gender = gender;
    req.session.minage = minage;
    req.session.maxage = maxage;
    req.session.rating = rating;
-  // req.session.range = range;
-
+   req.session.range = distance;
+  con.query("SELECT COUNT (*) AS count FROM user", function (err, user_count) {
+    if (err) throw err;
    con.query("SELECT count(*) as total FROM filter_tags", function (err, results, fields) {
     if (err) throw err;
     if(results[0].total == 0){
         if(!rating){
             if(gender == "bisexual"){
-                con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `age` BETWEEN ? AND ? ", [req.session.user, minage, maxage],function(err, usesNoTags, field){
+                con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `age` BETWEEN ? AND ? AND `username` IN (SELECT `username` FROM `filter_locations`)", [req.session.user, minage, maxage],function(err, usesNoTags, field){
                     if (err) throw err;
-                    res.render("home", {userData: usesNoTags, user: req.session.user});
+                    res.render("home", {userData: usesNoTags, user: req.session.user, user_count: user_count[0].count});
                 })
             }else{
-                con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `gender` = ? AND `age` BETWEEN ? AND ? ", [req.session.user, gender, minage, maxage],function(err, usesNoTags, field){
+                con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `gender` = ? AND `age` BETWEEN ? AND ? AND `username` IN (SELECT `username` FROM `filter_locations`)", [req.session.user, gender, minage, maxage],function(err, usesNoTags, field){
                     if (err) throw err;  
-                    res.render("home", {userData: usesNoTags, user: req.session.user});
+                    res.render("home", {userData: usesNoTags, user: req.session.user, user_count: user_count[0].count});
                 })
             }    
         }else{
-            con.query("SELECT COUNT (*) AS count FROM user", function (err, user_count) {
-                if (err) throw err;
-
                 var ratingNo = Math.round(rating * 0.2 * user_count[0].count);
 
                 if(gender == "bisexual"){
-                    con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `age` BETWEEN ? AND ? AND likes >= ?", [req.session.user, minage, maxage, ratingNo],function(err, usesNoTags, field){
+                    con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `age` BETWEEN ? AND ? AND likes >= ? AND `username` IN (SELECT `username` FROM `filter_locations`)", [req.session.user, minage, maxage, ratingNo],function(err, usesNoTags, field){
                         if (err) throw err;
-                        res.render("home", {userData: usesNoTags, user: req.session.user});
+                        res.render("home", {userData: usesNoTags, user: req.session.user, user_count: user_count[0].count});
                     })
                 }else{
-                    con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `gender` = ? AND `age` BETWEEN ? AND ? AND likes >= ?", [req.session.user, gender, minage, maxage, ratingNo],function(err, usesNoTags, field){
+                    con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `gender` = ? AND `age` BETWEEN ? AND ? AND likes >= ? AND `username` IN (SELECT `username` FROM `filter_locations`)", [req.session.user, gender, minage, maxage, ratingNo],function(err, usesNoTags, field){
                         if (err) throw err;  
-                        res.render("home", {userData: usesNoTags, user: req.session.user});
+                        res.render("home", {userData: usesNoTags, user: req.session.user, user_count: user_count[0].count});
                     })
                 }   
-            })
         }
        
     }else{////if there is tags
         if(!rating){
             if(gender == "bisexual"){
-                con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `age` BETWEEN ? AND ? AND `username` IN (SELECT `username` FROM `interests` WHERE `interests` IN (SELECT `interests` FROM `filter_tags`))", [req.session.user, minage, maxage], function (err, results, fields) {
+                con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `age` BETWEEN ? AND ? AND `username` IN (SELECT `username` FROM `interests` WHERE `interests` IN (SELECT `interests` FROM `filter_tags`)) AND `username` IN (SELECT `username` FROM `filter_locations`)", [req.session.user, minage, maxage], function (err, results, fields) {
                     if (err) throw err;
-                    res.render("home", {userData: results, user: req.session.user});
+                    res.render("home", {userData: results, user: req.session.user, user_count: user_count[0].count});
                 })
               }else{
-                  con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `gender` = ? AND `age` BETWEEN ? AND ? AND `username` IN (SELECT `username` FROM `interests` WHERE `interests` IN (SELECT `interests` FROM `filter_tags`))", [req.session.user, gender, minage, maxage], function (err, results, fields) {
+                  con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `gender` = ? AND `age` BETWEEN ? AND ? AND `username` IN (SELECT `username` FROM `interests` WHERE `interests` IN (SELECT `interests` FROM `filter_tags`)) AND `username` IN (SELECT `username` FROM `filter_locations`)", [req.session.user, gender, minage, maxage], function (err, results, fields) {
                   if (err) throw err;
                       console.log("results");
                       console.log(results);
                   //render home with results
-                  res.render("home", {userData: results, user: req.session.user});
+                  res.render("home", {userData: results, user: req.session.user, user_count: user_count[0].count});
               })
             }
         }else{
-            con.query("SELECT COUNT (*) AS count FROM user", function (err, user_count) {
-                if (err) throw err;
-
                 var ratingNo = Math.round(rating * 0.2 * user_count[0].count);
 
                 if(gender == "bisexual"){
-                    con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `age` BETWEEN ? AND ? AND likes >= ? AND `username` IN (SELECT `username` FROM `interests` WHERE `interests` IN (SELECT `interests` FROM `filter_tags`))", [req.session.user, minage, maxage, ratingNo], function (err, results, fields) {
+                    con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `age` BETWEEN ? AND ? AND likes >= ? AND `username` IN (SELECT `username` FROM `interests` WHERE `interests` IN (SELECT `interests` FROM `filter_tags`)) AND `username` IN (SELECT `username` FROM `filter_locations`)", [req.session.user, minage, maxage, ratingNo], function (err, results, fields) {
                         if (err) throw err;
-                        res.render("home", {userData: results, user: req.session.user});
+                        res.render("home", {userData: results, user: req.session.user, user_count: user_count[0].count});
                     })
                   }else{
-                      con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `gender` = ? AND `age` BETWEEN ? AND ? AND likes >= ? AND `username` IN (SELECT `username` FROM `interests` WHERE `interests` IN (SELECT `interests` FROM `filter_tags`))", [req.session.user, gender, minage, maxage, ratingNo], function (err, results, fields) {
+                      con.query("SELECT * FROM `user_filter` WHERE `username` != ? AND `gender` = ? AND `age` BETWEEN ? AND ? AND likes >= ? AND `username` IN (SELECT `username` FROM `interests` WHERE `interests` IN (SELECT `interests` FROM `filter_tags`)) AND `username` IN (SELECT `username` FROM `filter_locations`)", [req.session.user, gender, minage, maxage, ratingNo], function (err, results, fields) {
                       if (err) throw err;
-                      res.render("home", {userData: results, user: req.session.user});
+                      res.render("home", {userData: results, user: req.session.user, user_count: user_count[0].count});
                   })
                 }
-            })
         }
     }
    })
+})
 });
 
 router.get('/:user', (req, res)=>{
@@ -161,6 +200,7 @@ router.get('/:user', (req, res)=>{
                                             bio: userProfile[0].bio,
                                             likes: likes[0].count,
                                             users: user_count[0].count,
+                                            location: userProfile[0].city,
                                         });
                                         return;
                                         }else{
@@ -180,6 +220,7 @@ router.get('/:user', (req, res)=>{
                                             bio: userProfile[0].bio,
                                             likes: likes[0].count,
                                             users: user_count[0].count,
+                                            location: userProfile[0].city,
                                         });
                                         return;
                                         }

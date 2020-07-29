@@ -5,6 +5,7 @@ var router = express.Router();
 var con = require("../config/connection");
 
 router.get("/", function (req, res) {
+  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
 con.query("INSERT INTO user_block(username,requ_user) VALUES(?,?) ", [req.session.user,req.session.connect_invite], function (err, result) {
     console.log('You have blocked' + req.session.connect_invite);
 })

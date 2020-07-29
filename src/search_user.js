@@ -12,16 +12,20 @@ var con = require("../config/connection");
 const session = require("express-session");
 
 router.get("/", function (req, res) {
-  // res.end();
-  //router.reload();
-  res.render("search_user", { data: { x,count_value,likes,disable_likes, table_images } });
-  x = {};
-  console.log("here" +  JSON.stringify(count_value));
-  like = {};
-  count_value = {};
-  table_images = {};
-  disable_likes = {};
-  return false;
+  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+  if(!req.session.user){
+    res.render("login",{msg: "Please log in"});
+      }
+      else{
+        res.render("search_user", { data: { x,count_value,likes,disable_likes, table_images } });
+        x = {};
+        console.log("here" +  JSON.stringify(count_value));
+        like = {};
+        count_value = {};
+        table_images = {};
+        disable_likes = {};
+        return false;
+      }
 });
 
 
