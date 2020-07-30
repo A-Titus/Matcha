@@ -19,7 +19,6 @@ router.get("/", function (req, res) {
       else{
         res.render("search_user", { data: { x,count_value,likes,disable_likes, table_images } });
         x = {};
-        console.log("here" +  JSON.stringify(count_value));
         like = {};
         count_value = {};
         table_images = {};
@@ -67,7 +66,8 @@ router.post("/", urlencodedParser, function (req, res) {
     });
 
     req.session.connect_invite = query_results.values;
-    res.redirect("/search_user");
+    var url = "/filter/"+ output1;
+    res.redirect(url);
   }
 
 });

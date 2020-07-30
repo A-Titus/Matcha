@@ -98,6 +98,12 @@ function database() {
         con.query(sql, function (err, result) {
           if (err) throw err;
           console.log("filter_location Table created");
+        })
+
+        var sql = "CREATE TABLE IF NOT EXISTS views (id int AUTO_INCREMENT PRIMARY KEY, viewer varchar(255), viewed varchar(255))";
+        con.query(sql, function (err, result) {
+          if (err) throw err;
+          console.log("views Table created");
           console.log("Done");
         })
         

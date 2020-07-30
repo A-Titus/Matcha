@@ -80,7 +80,7 @@ con.connect(function (err) {
   }
     generateUsers();
     console.log('500 records inserted!');
-    //  console.log('faker commented out for now');
+     //console.log('faker commented out for now');
 
 
 router.get("/", function (req, res) {

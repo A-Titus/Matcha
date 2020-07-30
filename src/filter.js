@@ -152,16 +152,12 @@ router.get('/:user', (req, res)=>{
       if (!req.session.user) {
         res.render("login", { msg: "Please log in" });
       } else {
-        if(!req.session.profile)
-        res.redirect("/setProfile")
-        else{
             var username = req.params.user;
             req.session.connect_invite = username;
-            console.log("blocked " + username);
-            console.log("session user " + req.session.user)
-
-
             
+            con.query("INSERT INTO views (viewer, viewed) values (?, ?)", [req.session.user, username], function (err, user_count) {
+                if (err) throw err;
+            })
           
     con.query("SELECT COUNT (*) AS count FROM user", function (err, user_count) {
         if (err) throw err;       
@@ -177,9 +173,7 @@ router.get('/:user', (req, res)=>{
                             if (err) throw err;
                             con.query("SELECT * FROM `interests` WHERE `username` = ?", username, function (err, tags, fields) {
                                 if (err) throw err;
-                                if (!req.session.profile) {
-                                    res.render("set_profile", {username: username, photos: result});
-                                } else{
+                               
                                     
                                     con.query("SELECT * FROM user_block WHERE (username = (?) AND requ_user = (?)) ", [req.session.connect_invite, req.session.user], function (err, result) {
                                         //console.log("the result :" + JSON.stringify(result));
@@ -234,7 +228,7 @@ router.get('/:user', (req, res)=>{
                                     })
 
                                     
-                                }
+                            
                                 }
                             );
                             }
@@ -247,7 +241,7 @@ router.get('/:user', (req, res)=>{
             );
         });
     });
-            }
+        
             }
  
 });

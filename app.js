@@ -30,6 +30,7 @@ var filter = require('./src/filter');
 var chat = require('./src/chat')[0];
 var chatjs = require('./src/chat')[1];
 var sort = require('./src/sort');
+var userHistory = require('./src/user_history');
 
 // app.get("*", function (req, res) {
 //   res.render("error");
@@ -58,6 +59,7 @@ app.use('/block',block);
 app.use('/filter',filter);
 app.use('/chat', chat);
 app.use('/sort', sort);
+app.use('/userHistory', userHistory);
 chatjs(io);
 
 
@@ -74,6 +76,10 @@ app.get("/", function (req, res) {
         req.session.gender = null;
         req.session.minage = null;
         req.session.maxage = null;
+
+        con.query("DELETE FROM filter_locations", function (err, results, fields) {
+          if (err) throw err;
+      })
 
         con.query("SELECT latitude, longitude FROM user_filter WHERE username = ?", [req.session.user], function (err, myCo) {
           if (err) throw err;

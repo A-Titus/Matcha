@@ -164,6 +164,20 @@ body, html{
     background-color: white;
 }
 
+.history{
+    background-color: #b9b9b9;
+    text-align: center;
+    width: 20%;
+    height: 50%;
+    margin-top: 3%;
+    margin-left: 3%;
+    margin-right: 3%;
+    float: left;
+    display: table;
+    border-radius: 3%;
+    border: 1px solid rgb(131, 130, 130);
+}
+
 .profile {
     width: 45%;
     height: 100%;
